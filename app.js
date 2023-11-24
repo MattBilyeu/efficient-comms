@@ -27,7 +27,7 @@ const fileStorage = multer.diskStorage({
 });
 
 app.use(bodyParser.json());
-app(multer({storage: fileStorage}).single('pdf'));
+app(multer({storage: fileStorage}).array('pdf'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(

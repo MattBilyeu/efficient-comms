@@ -140,9 +140,38 @@ exports.resetPassword = (req, res, next) => {
 }
 
 exports.findUserById = (req, res, next) => {
-    
+    const userId = rea.body.userId;
+    User.findById(userId)
+        .then(user => {
+            if (!user) {
+                res.status(404).json({message: 'User not found'})
+            };
+            return res.status(201).json(user);
+        })
+        .catch(err => {
+            console.log(err);
+            next(new Error('Error in server query.')) 
+    })
 };
 
-exports.deleteUserexports = (req, res, next) => {
-    // Delete any owned escalations along with user
+exports.deleteUser = (req, res, next) => {
+    const userId = req.body.userId;
+    User.findByIdAndDelete(userId)
+        .then(result => {
+            Escalation.find()
+                .then(escalations => {
+                    escalations.forEach(e => {
+                        if (e.ownerId === userId) {
+                            Escalation.findByIdAndDelete(e._id);
+                        }
+                    })
+                })
+                .catch(err => {
+                    next(new Error('Error in server query.')) 
+                })
+        })
+        .catch(err => {
+            console.log(err);
+            next(new Error('Error in server query.'))
+        })
 }
