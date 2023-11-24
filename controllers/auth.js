@@ -1,3 +1,5 @@
+// Session to include: teamId, userId, role
+
 const User = require('../models/user');
 
 const bcrypt = require('bcrypt');

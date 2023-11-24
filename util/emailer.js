@@ -1,3 +1,3 @@
-module.exports = sendEmail = function(to, from, subject, body) {
+module.exports = sendEmail = function(to, subject, body) {
     //Code to send emails
 }
