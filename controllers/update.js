@@ -70,7 +70,7 @@ exports.updateUpdate = (req, res, next) => {
     const title = req.body.title;
     const text = req.body.text;
     const teamId = req.session.teamId;
-    const files = req.body.files.map((file) => '/files/' + file.filename);
+    const files = req.files.map((file) => '/files/' + file.filename);
     let changedUpdate;
     let emailList
     Update.findById(updateId)

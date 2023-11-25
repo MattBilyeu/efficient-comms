@@ -1,4 +1,4 @@
-// Session to include: teamId, userId, role
+// Session to include: teamId, userId, role, name
 
 const User = require('../models/user');
 
