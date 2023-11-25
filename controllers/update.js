@@ -20,7 +20,7 @@ exports.createUpdate = (req, res, next) => {
     let notAcknowledged = [];
     const role = req.session.role;
     if (role !== 'Manager' && role !== 'Admin') {
-        return res.status(422).json({message: 'You are not authorized to create updates.'})
+        return res.status(403).json({message: 'You are not authorized to create updates.'})
     };
     Team.findById(teamId)
         .populate(users)
@@ -88,7 +88,7 @@ exports.updateUpdate = (req, res, next) => {
                 changedUpdate.notAcknowledged = team.users.map((userObj) => userObj._Id).filter((_Id => _Id !== userId));
                 changedUpdate.save()
                     .then(result => {
-                        sendMailList(emailList, `Update Changed - ${title}`, '<p>You have a new update ready for review.</p>');
+                        sendMailList(emailList, `Update Changed - ${title}`, '<p>An update has been deleted, please review again.</p>');
                         res.status(201).json({message: 'Update changed successfully.'})
                     })
                     .catch(err => {
@@ -112,8 +112,11 @@ exports.acknowledgeUpdate = (req, res, next) => {
     const updateId = req.body.updateId;
     update.findById(updateId)
         .then(update => {
-            update.acknowledged.push(userId); // Written this way, the same userId could potentially be acknowledged twice, but that doesn't matter due to how I am going to write the frontend.
+            update.acknowledged.push(userId);
             update.notAcknowledged = update.notAcknowledged.filter(Id => Id !== userId);
+            if (update.notAcknowledged.length === 0) {
+                deleteFiles(update.files);
+            };
             update.save()
                 .then(result => {
                     res.status(201).json({message: 'Update acknowledged.'})
@@ -135,25 +138,33 @@ exports.deleteUpdate = (req, res, next) => {
     const teamId = req.session.teamId;
     const role = req.session.role;
     if (role !== 'Manager' && role !== 'Admin') {
-        return res.status(422).json({message: 'You are not authorized to delete updates.'})
+        return res.status(403).json({message: 'You are not authorized to delete updates.'})
     };
-    Update.findByIdAndDelete(updateId) // Still need to delete files!!!
-        .then(result => {
-            Team.findById(teamId)
-                .then(team => {
-                    team.updates = team.updates.filter(Id => Id !== updateId);
-                    team.save()
-                        .then(result => {
-                            res.status(200).json({message: 'Update deleted.'})
-                        })
-                        .catch(err => {
-                            console.log(err);
-                            next(new Error('Server operation error - Unable to save team.'))
-                        })
+    Update.findById(updateId)
+        .then(update => {
+            deleteFiles(update.files);
+            Update.findByIdAndDelete(updateId)
+                .then(result => {
+                    Team.findById(teamId)
+                    .then(team => {
+                        team.updates = team.updates.filter(Id => Id !== updateId);
+                        team.save()
+                            .then(result => {
+                                res.status(200).json({message: 'Update deleted.'})
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                next(new Error('Server operation error - Unable to save team.'))
+                            })
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        next(new Error('Server operation error - Unable to search for team.'))
+                    })
                 })
-                .catch(err => {
+                .catach(err => {
                     console.log(err);
-                    next(new Error('Server operation error - Unable to search for team.'))
+                    next(new Error('Server operation error - Unable to delete update.'))
                 })
         })
 }
