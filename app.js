@@ -9,6 +9,12 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const mongoURI = require('./util/protected').mongoURI;
 const secret = require('./util/protected').secret;
 
+const authRoutes = require('./routes/login');
+const teamRoutes = require('./routes/team');
+const userRoutes = require('./routes/user');
+const escalationRoutes = require('./routes/escalation');
+const updateRoutes = require('./routes/update');
+
 const app = express();
 
 const store = new MongoDBStore({
@@ -30,6 +36,8 @@ app.use(bodyParser.json());
 app(multer({storage: fileStorage}).array('pdf'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/', (req, res, next) => {res.sendFile(path.join(__dirname, 'public', 'index.html'))});
+
 app.use(
     session({
         secret: secret,
@@ -38,6 +46,21 @@ app.use(
         store: store
     })
 );
+
+app.use('/login', authRoutes);
+app.use('/team', teamRoutes);
+app.use('/user', userRoutes);
+app.use('/escalation', escalationRoutes);
+app.use('/update', updateRoutes);
+
+app.use((error, req, res, next) => {
+    console.log(error);
+    if (error.msg.indexOf('server') !== -1) {
+        res.status(500).json(error);
+    } else {
+        res.status(400).json(error);
+    }
+});
 
 mongoose
     .connect(mongoURI)

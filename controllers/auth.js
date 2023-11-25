@@ -37,3 +37,10 @@ exports.postLogin = (req, res, next) => {
             next(new Error('Server error = Unable to query user.'))
         })
 };
+
+exports.postLogout = (req, res, next) => {
+    req.session.destroy(err => {
+        console.log(err);
+        next(new Error('Unable to destroy session.'))
+    })
+}

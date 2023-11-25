@@ -1,5 +1,12 @@
 const fs = require('fs');
 
-exports.deleteFiles = function(arr) {
-    // Array will be of values: '/files/' + file.filename
+exports.deleteFiles = (arr) => {
+    arr.forEach(item => {
+        let filePath = '../' + item;
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                throw (err);
+            }
+        })
+    })
 }
