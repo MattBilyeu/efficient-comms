@@ -26,7 +26,7 @@ exports.createEscalation = (req, res, next) => {
             };
             const newEscalation = new Escalation({
                 title: title,
-                text: text,
+                notes: [text],
                 files: files,
                 teamId: teamId,
                 ownerId: ownerId,
@@ -59,7 +59,9 @@ exports.createEscalation = (req, res, next) => {
 
 exports.advanceEscalation = (req, res, next) => {
     const escalationId = req.body.escalationId;
-    const teamId = req.body.teamId;
+    const teamId = req.session.teamId;
+    const note = req.body.note;
+    const files = req.files.map(file => '/files/' + file.filename);
     let team;
     let peerReviewers;
     Team.findById(teamId)
@@ -76,14 +78,19 @@ exports.advanceEscalation = (req, res, next) => {
                         emailList = team.users.filter(user => user.role === 'Manager').map(user => user.email);
                     } else if (escalation.stage === 'Manager') {
                         escalation.stage = 'Member';
-                        emailList = [team.users.filter(user => userId === req.session.userId).map(user => user.email)];
+                        emailList = team.users.filter(user => user._Id === escalation.ownerId).map(user => user.email);
                     } else if (escalation.stage === 'Member' && peerReviewers.length === 0) {
                         escalation.stage = 'Manager'
                         emailList = team.users.filter(user => user.role === 'Manager').map(user => user.email);
                     } else {
                         escalation.stage = 'Peer Review'
-                        peerReviewers = team.users.filter(user => user.peerReviewer === true).map(user => user.email);
+                        emailList = peerReviewers.map(user => user.email);
                     };
+                    if (files.length !== 0) {
+                        deleteFiles(escalation.files);
+                        escalation.files = files;
+                    };
+                    escalation.notes.push(note);
                     escalation.save()
                         .then(result => {
                             send(emailList, 'Escalation Ready for Review', '<p>An escalation is ready for your review.</p>');
@@ -96,10 +103,26 @@ exports.advanceEscalation = (req, res, next) => {
         })
 };
 
-exports.updateEscalation = (req, res, next) => {
-    
-};
-
 exports.deleteEscalation = (req, res, next) => {
-    // Make sure to delete the files
+    Escalation.findByIdAndDelete(req.body.escalationId)
+        .then(result => {
+            Team.findById(req.session.teamId)
+                .then(team => {
+                    team.escalations = team.escalations.filter(e => e._Id !== req.session.escalationId);
+                    team.save()
+                        .then(result => res.status(200).json({message: 'Escalation Deleted.'}))
+                        .catch(err => {
+                            console.log(err);
+                            next(new Error('Server error - Unable to save team data.'))
+                        })
+                })
+                .catch(err => {
+                    console.log(err);
+                    next(new Error('Server error - Unable to query team.'))
+                })
+        })
+        .catch(err => {
+            console.log(err);
+            next(new Error('Server error - Unable to query escalation.'))
+        })
 };

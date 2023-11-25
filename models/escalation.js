@@ -7,10 +7,10 @@ const escalationSchema = new Schema({
         type: String,
         required: true
     },
-    text: {
+    notes: [{
         type: String,
         required: true
-    },
+    }],
     files: [{
         type: String,
         required: false

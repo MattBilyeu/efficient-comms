@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const Team = require('../models/team');
 const Escalation = require('../models/escalation');
+const Update = require('../models/update');
 
 const emailer = require('../util/emailer');
 
@@ -156,22 +157,57 @@ exports.findUserById = (req, res, next) => {
 
 exports.deleteUser = (req, res, next) => {
     const userId = req.body.userId;
+    let teamId;
+    let updateIds;
     User.findByIdAndDelete(userId)
-        .then(result => {
-            Escalation.find()
+        .then(deletedUser => {
+            if (!deletedUser) {
+                return res.status(422).json({message: 'User not found.'})
+            }
+            teamId = deletedUser.teamId;
+            Escalation.find({ownerId: userId})
                 .then(escalations => {
                     escalations.forEach(e => {
-                        if (e.ownerId === userId) {
-                            Escalation.findByIdAndDelete(e._id);
-                        }
+                        Escalation.findByIdAndDelete(e._id);
                     })
                 })
+                .then(result => {
+                    Team.findById(teamId)
+                        .then(team => {
+                            updateIds = team.updates;
+                            team.users = team.users.filter(Id => Id !== userId);
+                            team.save()
+                                .then(result => {
+                                    Update.find()
+                                        .then(updates => {
+                                            updates.forEach(update => {
+                                                update.acknowledged = update.acknowledged.filter(id => id !== userId);
+                                                update.notAcknowledged = update.notAcknowledged.filter(id => id !== userId);
+                                                update.save()
+                                            });
+                                            return res.status(200).json({message: 'User deleted.'})
+                                        })
+                                        .catch(err => {
+                                            console.log(err);
+                                            next(new Error('Server error - unable to save team.'))
+                                        })
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                    next(new Error('Server error - unable to save team.'))
+                                })
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            next(new Error('Server error - unable to query teams.'))
+                        })
+                })
                 .catch(err => {
-                    next(new Error('Error in server query.')) 
+                    next(new Error('Server error - unable to query escalations.')) 
                 })
         })
         .catch(err => {
             console.log(err);
-            next(new Error('Error in server query.'))
+            next(new Error('Server error - unable to query users.'))
         })
 }

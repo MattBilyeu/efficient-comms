@@ -1,4 +1,7 @@
 const Team = require('../models/team');
+const Update = require('../models/update');
+const Escalation = require('../models/escalation');
+
 const deleteFiles = require('../util/files').deleteFiles;
 
 exports.createTeam = (req, res, next) => {
@@ -37,6 +40,7 @@ exports.reassignMembers = (req, res, next) => {
     const targetTeam = req.body.teamId;
     const oldTeam = req.body.oldTeamId;
     const userId = req.body.userId;
+    let updateIds;
     Team.findById(targetTeam)
         .then(team => {
             team.users.push(userId);
@@ -44,9 +48,29 @@ exports.reassignMembers = (req, res, next) => {
                 .then(result => {
                     Team.findById(oldTeam)
                         .then(formerTeam => {
+                            updateIds = formerTeam.updates;
                             formerTeam.users = formerTeam.users.filter(Id => Id !== userId);
                             formerTeam.save()
-                                .then(result => res.status((200).json({message: 'User reassigned.'})))
+                                .then(result => {
+                                    Update.find()
+                                        .then(updates => {
+                                            updates.forEach(update => {
+                                                if (update.teamId === oldTeam) {
+                                                    update.notAcknowledged = update.notAcknowledged.filter(id => id !== userId);
+                                                    update.acknowledged = update.acknowledged.filter(id => id !== userId);
+                                                    update.save()
+                                                } else if (update.teamid === targetTeam) {
+                                                    update.notAcknowledged.push(userId);
+                                                    update.save()
+                                                }
+                                            });
+                                            res.status(200).json({message: 'User reassigned.'})
+                                        })
+                                        .catch(err => {
+                                            console.log(err);
+                                            next(new Error('Server error - Unable to query updates.'))
+                                        })
+                                })
                                 .catch(err => {
                                     console.log(err);
                                     next(new Error('Server error - Unable to save team.'))
@@ -79,7 +103,33 @@ exports.deleteTeam = (req, res, next) => {
             deleteFiles(team.updates.files);
             deleteFiles(team.escalations.files);
             Team.findByIdAndDelete(req.body.teamId)
-                .then(result => res.status(200).json({message: 'Team Deleted.'}))
+                .then(result => {
+                    Escalation.find()
+                        .then(escalations => {
+                            escalations.forEach(escalation => {
+                                if (escalation.teamId === req.body.teamId) {
+                                    escalation.findByIdAndDelete(escalation._Id);
+                                };
+                            });
+                            Update.find()
+                                .then(updates => {
+                                    updates.forEach(update => {
+                                        if (update.teamId === req.body.teamId) {
+                                            Update.findByIdAndDelete(update._Id);
+                                        }
+                                    });
+                                    return res.status(200).json({message: 'Team deleted.'})
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                    next(new Error('Server error - Unable to query escalations.'))
+                                })
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            next(new Error('Server error - Unable to query escalations.'))
+                        })
+                })
                 .catch(err => {
                     console.log(err);
                     next(new Error('Server error - Unable to delete team.'))
