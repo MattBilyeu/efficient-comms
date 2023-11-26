@@ -16,4 +16,6 @@ router.post('/findUser', userController.findUserById);
 
 router.post('/delete', userController.deleteUser);
 
+router.post('/getNames', userController.getUserNames);
+
 module.exports = router;

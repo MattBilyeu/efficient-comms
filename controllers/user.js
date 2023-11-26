@@ -211,3 +211,21 @@ exports.deleteUser = (req, res, next) => {
             next(new Error('Server error - unable to query users.'))
         })
 }
+
+exports.getUserNames = (req, res, next) => {
+    const idArray = req.body.userIds;
+    let names = [];
+    User.find()
+        .then(users => {
+            users.forEach(user => {
+                if (user._Id in idArray) {
+                    names.push(user.name);
+                }
+            });
+            return res.status(201).json(names);
+        })
+        .catch(err => {
+            console.log(err);
+            next(new Error('Server error - unable to query users.'))
+        })
+}

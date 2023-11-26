@@ -28,7 +28,9 @@ exports.postLogin = (req, res, next) => {
                         .populate('updates')
                         .then(team => {
                             team.users = team.users.map(user => user.password = 'redacted');
-                            res.status(200).json(team);
+                            user.password = 'redacted';
+                            const package = {team: team, user: user};
+                            res.status(200).json(package);
                         })
                 })
         })
