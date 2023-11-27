@@ -1,7 +1,7 @@
 export class Escalation {
     public title: string;
     public notes: string[];
-    public files: string[];
+    public files: string[] | File[];
     public teamId: string[];
     public ownerId: string;
     public ownerName: string;

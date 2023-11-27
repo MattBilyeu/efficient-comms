@@ -4,7 +4,7 @@ export class Update {
     public text: string;
     public acknowledged: string[];
     public notAcknowledged: string[];
-    public files: string[];
+    public files: string[] | File[];
 
     constructor(teamId: string, title: string, text: string, acknowledged: string[], notAcknowledged: string[], files: string[]) {
         this.teamId = teamId;

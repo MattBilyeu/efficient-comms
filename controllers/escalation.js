@@ -6,7 +6,7 @@ const deleteFiles = require('../util/files').deleteFiles;
 
 exports.createEscalation = (req, res, next) => {
     const title = req.body.title;
-    const text = req.body.text;
+    const notes = req.body.notes;
     const files = req.files.map((file) => '/files/' + file.filename);
     const teamId = req.session.teamId;
     const ownerId = req.session.userId;
@@ -26,7 +26,7 @@ exports.createEscalation = (req, res, next) => {
             };
             const newEscalation = new Escalation({
                 title: title,
-                notes: [text],
+                notes: notes,
                 files: files,
                 teamId: teamId,
                 ownerId: ownerId,
@@ -90,7 +90,7 @@ exports.advanceEscalation = (req, res, next) => {
                         deleteFiles(escalation.files);
                         escalation.files = files;
                     };
-                    escalation.notes.push(note);
+                    escalation.notes.concat(note);
                     escalation.save()
                         .then(result => {
                             send(emailList, 'Escalation Ready for Review', '<p>An escalation is ready for your review.</p>');
