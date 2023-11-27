@@ -1,6 +1,6 @@
 <div class="container">
-    <h1>Login</h1>
-    <form (ngSubmit)="login(f)" #f="ngForm">
+    <form (ngSubmit)="login(f)" #f="ngForm" *ngIf="!resetRequest">
+        <h1>Login</h1>
         <div class="group">
             <label for="email">Email: </label>
             <input type="email" id="email" name="email" ngModel required>
@@ -11,10 +11,19 @@
         </div>
         <div class="group">
             <button type="submit">Login</button>
-            <button class="link">Reset Password</button>
+            <button type="button" class="link" (click)="switchReset()">Reset Password</button>
         </div>
     </form>
-    <div class="alertMessage" *ngIf="error">
-        <h3>{{ error }}</h3>
+    <form (ngSubmit)="sendReset(r)" #r="ngForm" *ngIf="resetRequest">
+        <h1>Reset Password</h1>
+        <div class="group">
+            <label for="email">Email: </label>
+            <input type="email" id="email" name="email" ngModel required>
+        </div>
+        <button type="submit">Submit</button>
+        <button type="button" (click)="switchReset()">Back to Login</button>
+    </form>
+    <div class="alertMessage" *ngIf="alert">
+        <h3>{{ alert }}</h3>
     </div>
 </div>

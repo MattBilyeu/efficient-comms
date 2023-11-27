@@ -6,6 +6,7 @@ import { User } from '../models/user.model';
   providedIn: 'root'
 })
 export class DataService {
+  adminTeamOb!: Team[];
   user!: User;
   team!: Team;
 

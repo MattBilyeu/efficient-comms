@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent {
-
+  //Methods: Create user, update user, deleteUser
 }

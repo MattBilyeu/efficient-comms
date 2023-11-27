@@ -19,7 +19,7 @@ const routes: Routes = [
     loadChildren: ()=> import("./user/user.module").then(m => m.UserModule)
   },
   { path: "escalations", component: EscalationsComponent },
-  { path: "pass-reset", component: PassResetComponent }
+  { path: "pass-reset/:token", component: PassResetComponent }
 ];
 
 @NgModule({

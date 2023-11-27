@@ -1,1 +1,17 @@
-<p>pass-reset works!</p>
+<div class="container">
+    <form (ngSubmit)="resetPassword(f)" #f="ngForm">
+        <h1>Password Reset</h1>
+        <div class="group">
+            <label for="password">Password: </label>
+            <input type="password" id="password" name="password" ngModel required>
+        </div>
+        <div class="group">
+            <label for="confirmPassword">Confirm Password: </label>
+            <input type="password" id="confirmPassword" name="confirmPassword" ngModel required>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+    <div class="alertMessage" *ngIf="alert">
+        <h3>{{ alert }}</h3>
+    </div>
+</div>
