@@ -1,4 +1,5 @@
 export class Escalation {
+    public id?: string;
     public title: string;
     public notes: string[];
     public files: string[] | File[];

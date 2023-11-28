@@ -1,3 +1,53 @@
 <div class="alert" *ngIf="alert">
     <h1>{{ alert }}</h1>
 </div>
+<div class="container">
+    <form (ngSubmit)="createTeam(f)" #f="ngForm">
+        <div class="group">
+            <label for="name">Create Team: </label>
+            <input type="text" id="name" name="name" ngModel required>
+        </div>
+        <button type="submit">Create Team</button>
+    </form>
+    <form (ngSubmit)="updateTeamName(u)" #u="ngForm">
+        <div class="group">
+            <select name="teamId" id="teamId" ngModel required>
+                <option [value]="team.id" *ngFor="let team of teams">{{ team.name }}</option>
+            </select>
+            <div>
+                <label for="newName">New Name:</label>
+                <input type="text" id="newName" name="newName" ngModel required>
+            </div>
+        </div>
+        <button type="submit">Update Team Name</button>
+    </form>
+    <form (ngSubmit)="reassignMembers(r)" #r="ngForm">
+        <div class="group">
+            <div>
+                <label for="userId">User:</label>
+                <select name="userId" id="userId" ngModel required>
+                    <option [value]="user.id" *ngFor="let user of users">{{ user.name }}</option>
+                </select>
+            </div>
+            <div>
+                <label for="teamId">Team:</label>
+                <select name="teamId" id="teamId" ngModel required>
+                    <option [value]="team.id" *ngFor="let team of teams">{{ team.name }}</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <div *ngIf="!deleteActive">
+        <h1>Need to delete a team?</h1>
+        <button (click)="activateDelete()">Activate Delete Form</button>
+    </div>
+    <form *ngIf="deleteActive" (ngSubmit)="deleteTeam(d)" #d="ngForm">
+        <div class="group">
+            <label for="teamId">Team: </label>
+            <select name="teamId" id="teamId" ngModel required>
+                <option [value]="team.id" *ngFor="let team of teams">{{ team.name }}</option>
+            </select>
+        </div>
+        <button type="submit">Delete Team</button>
+    </form>
+</div>

@@ -58,8 +58,8 @@ export class HttpService {
     return this.http.post('/team/createTeam', {name: name})
   }
 
-  updateTeamName(name: string) {
-    return this.http.post('/team/updateTeamName', {name: name})
+  updateTeamName(name: string, id: string) {
+    return this.http.post('/team/updateTeamName', {name: name, teamId: id})
   }
 
   reassignMembers(targetTeamId: string, oldTeamId: string, userId: string) {
