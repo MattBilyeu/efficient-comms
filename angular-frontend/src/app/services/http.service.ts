@@ -70,7 +70,9 @@ export class HttpService {
     return this.http.post('/team/deleteTeam', {teamId: id})
   }
 
-  // --> Leaving out getPopuldatedTeam - Might not need this?
+  getPopulatedTeam(id: string) {
+    return this.http.post('/team/getPopulatedTeam', {teamId: id});
+  }
 
   // Update related
   createUpdate(files: File[], title: string, text: string) {

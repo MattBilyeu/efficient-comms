@@ -20,7 +20,7 @@ const userSchema = new Schema({
         required: true
     },
     teamId: {
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.Mixed,
         ref: 'Team',
         required: false
     },
