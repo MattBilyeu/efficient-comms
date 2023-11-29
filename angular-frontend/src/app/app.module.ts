@@ -9,13 +9,15 @@ import { PassResetComponent } from './pass-reset/pass-reset.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { EscalationDetailComponent } from './escalations/escalation-detail/escalation-detail.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     EscalationsComponent,
-    PassResetComponent
+    PassResetComponent,
+    EscalationDetailComponent
   ],
   imports: [
     BrowserModule,

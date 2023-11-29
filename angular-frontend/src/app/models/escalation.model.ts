@@ -4,14 +4,14 @@ import { Mixed } from "mongoose";
 export class Escalation {
     public id?: string;
     public title: string;
-    public notes: String[] | SafeHtml[];
-    public files: string[] | File[];
+    public notes: string[] | SafeHtml[];
+    public files: string[] | FileList;
     public teamId: string;
     public ownerId: string;
     public ownerName: string;
     public stage: string;
 
-    constructor(title: string, notes: string[] | SafeHtml[], files: string[] | File[], teamId: string, ownerId: string, ownerName: string, stage: string) {
+    constructor(title: string, notes: string[] | SafeHtml[], files: string[] | FileList, teamId: string, ownerId: string, ownerName: string, stage: string) {
         this.title = title;
         this.notes = notes;
         this.files = files;

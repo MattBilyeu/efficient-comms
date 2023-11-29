@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Escalation } from '../models/escalation.model';
 import { DataService } from '../services/data.service';
 import { HttpService } from '../services/http.service';
 import { Team } from '../models/team.model';
 import { NgForm } from '@angular/forms';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 interface Response {
   message: string
@@ -16,6 +15,7 @@ interface Response {
   styleUrls: ['./escalations.component.css']
 })
 export class EscalationsComponent implements OnInit {
+  @ViewChild('files') fileInput!: ElementRef;
   alert: string;
   escalations: Escalation[];
   editorConfig = {
@@ -23,15 +23,14 @@ export class EscalationsComponent implements OnInit {
     suffix: ".min",
     plugins: "lists link table",
     toolbar: "numlist bullist link table"
-  }
+  };
+  fileList: FileList;
 
   constructor(private dataService: DataService,
-              private httpService: HttpService,
-              public domSanitizer: DomSanitizer) {}
+              private httpService: HttpService) {}
 
   ngOnInit() {
-    this.escalations = this.dataService.team.escalations.filter(escalation => escalation.ownerId === this.dataService.user.id);
-    this.sanitizeNotes();
+    this.escalations = this.filterEscalations(this.dataService.team.escalations);
   }
 
   updateComponent() {
@@ -41,26 +40,34 @@ export class EscalationsComponent implements OnInit {
           this.alert = response.message;
         } else {
           this.dataService.team = response;
-          this.escalations = response.escalations.filter(escalation => escalation.ownerId === this.dataService.user.id);
-          this.sanitizeNotes();
+          this.escalations = this.filterEscalations(response.escalations);
         }
       })
   };
 
-  sanitizeNotes() {
-    this.escalations = this.escalations.map(e => {
-      const sanitizedNotes: SafeHtml[] = e.notes.map(note => {
-        return this.domSanitizer.bypassSecurityTrustHtml(note);
-      });
-      return {...e, notes: sanitizedNotes}
+  filterEscalations(arr: Array<Escalation>) {
+    let filteredEscalations: Escalation[];
+    arr.forEach(e => {
+      if (
+        e.stage === 'Member' && e.ownerId === this.dataService.user.id ||
+        e.stage === 'Peer Review' && this.dataService.user.peerReviewer ||
+        e.stage === 'Manager' && this.dataService.user.role === 'Manager'
+      ) {
+        filteredEscalations.push(e)
+      }
     })
+    return filteredEscalations
+  }
+
+  chooseFiles(event: any) {
+    this.fileList = event.target.files
   }
 
   createEscalation(form: NgForm) {
     const newEscalation = new Escalation(
       form.value.title,
       [form.value.note],
-      form.value.files,
+      this.fileList,
       this.dataService.user.teamId,
       this.dataService.user.id,
       this.dataService.user.name,
@@ -87,7 +94,7 @@ export class EscalationsComponent implements OnInit {
     let advanceEscalationObject = {
       escalationId: form.value.escalationId,
       note: form.value.note,
-      files: form.value.files
+      files: this.fileList
     }
     this.httpService.advanceEscalationo(advanceEscalationObject)
       .subscribe((response: Response) => {
@@ -98,10 +105,10 @@ export class EscalationsComponent implements OnInit {
       })
   }
 
-  deleteEscalation(form: NgForm) {
+  deleteEscalation(id: string) {
     const confirmation = prompt('Are you sure you want to resolve this escalation?  It will permanently remove it.');
     if (confirmation) {
-      this.httpService.deleteEscalation(form.value.escalationId)
+      this.httpService.deleteEscalation(id)
         .subscribe((response: Response) => {
           this.alert = response.message;
           if (response.message === 'Escalation removed.') {

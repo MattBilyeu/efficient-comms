@@ -6,7 +6,7 @@ import { User } from '../models/user.model';
 interface advanceEscalationObject {
   escalationId: string,
   note: string,
-  files?: File[]
+  files?: FileList | string[]
 }
 
 @Injectable({
