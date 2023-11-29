@@ -90,10 +90,11 @@ exports.advanceEscalation = (req, res, next) => {
                         deleteFiles(escalation.files);
                         escalation.files = files;
                     };
-                    escalation.notes.concat(note);
+                    escalation.notes.push(note);
                     escalation.save()
                         .then(result => {
                             send(emailList, 'Escalation Ready for Review', '<p>An escalation is ready for your review.</p>');
+                            res.status(201).json({message: 'Escalation advanced.'})
                         })
                         .catch(err => {
                             console.log(err);
@@ -110,7 +111,7 @@ exports.deleteEscalation = (req, res, next) => {
                 .then(team => {
                     team.escalations = team.escalations.filter(e => e._Id !== req.session.escalationId);
                     team.save()
-                        .then(result => res.status(200).json({message: 'Escalation Deleted.'}))
+                        .then(result => res.status(200).json({message: 'Escalation removed.'}))
                         .catch(err => {
                             console.log(err);
                             next(new Error('Server error - Unable to save team data.'))

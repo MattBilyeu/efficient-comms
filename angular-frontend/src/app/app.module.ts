@@ -8,6 +8,7 @@ import { EscalationsComponent } from './escalations/escalations.component';
 import { PassResetComponent } from './pass-reset/pass-reset.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 
 @NgModule({
   declarations: [
@@ -20,9 +21,10 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    EditorModule
   ],
-  providers: [],
+  providers: [{provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

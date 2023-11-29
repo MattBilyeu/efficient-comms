@@ -1,1 +1,6 @@
-<p>escalations works!</p>
+<div class="container">
+    <form #c="ngForm" (ngSubmit)="createEscalation(c)">
+        <label for="note">Note: </label>
+        <editor [init]="editorConfig" id="note" name="note" ngModel required></editor>
+    </form>
+</div>

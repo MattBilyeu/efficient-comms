@@ -5,8 +5,8 @@ import { User } from '../models/user.model';
 
 interface advanceEscalationObject {
   escalationId: string,
-  note: string[],
-  files: File[]
+  note: string,
+  files?: File[]
 }
 
 @Injectable({
