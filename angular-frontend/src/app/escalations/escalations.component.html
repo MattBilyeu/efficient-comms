@@ -10,22 +10,5 @@
         <editor [init]="editorConfig" id="note" name="note" ngModel required></editor>
         <button type="submit">Create Escalation</button>
     </form>
-    <div class="viewEscalation" *ngFor="let e of escalations">
-        <div class="inputsContainer">
-            <form #a="ngForm" (ngSubmit)="advanceEscalation(a)">
-                <input type="hidden" name="escalationId" id="escalationId" [value]="e.id">
-                <h3>{{ e.title }}</h3>
-                <label for="note">Note: </label>
-                <editor [init]="editorConfig" id="note" name="note" ngModel required></editor>
-                <label for="files">Files:</label>
-                <input type="file" name="files" id="files" multiple ngModel (change)="chooseFiles($event)">
-                <button type="submit">Advance Escalation</button>
-            </form>
-            <button type="button" (click)="deleteEscalation(e.id)">Resolve Escalation</button>
-        </div>
-        <div class="files">
-            <a [href]="file" *ngFor="let file of e.files" target="_blank">{{ file }}</a>
-        </div>
-        <div class="escalationNotes" [innerHTML]="note" *ngFor="let note of e.notes"></div>
-    </div>
+    <app-escalation-detail (deleted)="updateComponent()" [eId]="e.id" *ngFor="let e of escalations"></app-escalation-detail>
 </div>

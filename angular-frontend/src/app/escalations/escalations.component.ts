@@ -89,32 +89,4 @@ export class EscalationsComponent implements OnInit {
         this.alert = response.message;
       })
   }
-
-  advanceEscalation(form: NgForm) {
-    let advanceEscalationObject = {
-      escalationId: form.value.escalationId,
-      note: form.value.note,
-      files: this.fileList
-    }
-    this.httpService.advanceEscalationo(advanceEscalationObject)
-      .subscribe((response: Response) => {
-        this.alert = response.message;
-        if (response.message === 'Escalation advanced.') {
-          this.updateComponent();
-        }
-      })
-  }
-
-  deleteEscalation(id: string) {
-    const confirmation = prompt('Are you sure you want to resolve this escalation?  It will permanently remove it.');
-    if (confirmation) {
-      this.httpService.deleteEscalation(id)
-        .subscribe((response: Response) => {
-          this.alert = response.message;
-          if (response.message === 'Escalation removed.') {
-            this.updateComponent();
-          }
-        })
-    }
-  }
 }
