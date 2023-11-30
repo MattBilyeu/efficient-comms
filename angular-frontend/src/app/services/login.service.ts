@@ -58,7 +58,7 @@ export class LoginService {
         if (response) {
           this.dataService.team = undefined;
           this.dataService.user = undefined;
-          this.router.navigate(['/login'])
+          this.loggedIn.next(false);
         }
       })
   }

@@ -1,0 +1,9 @@
+<div class="container">
+    <div class="viewEscalation">
+        <h3>{{ update.title }}</h3>
+        <div [innerHTML]="sanitizedText"></div>
+        <div class="files">
+            <a [href]="file" *ngFor="let file of fileUrls" target="_blank">{{ file }}</a>
+        </div>
+    </div>
+</div>

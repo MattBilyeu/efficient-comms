@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
-import { EscalationsComponent } from './escalations/escalations.component';
 import { PassResetComponent } from './pass-reset/pass-reset.component';
+import { AllUpdatesComponent } from './all-updates/all-updates.component';
 
 const routes: Routes = [
   {path: "", component: LoginComponent, pathMatch: "full"},
@@ -18,8 +18,8 @@ const routes: Routes = [
     path: "user",
     loadChildren: ()=> import("./user/user.module").then(m => m.UserModule)
   },
-  { path: "escalations", component: EscalationsComponent },
-  { path: "pass-reset/:token", component: PassResetComponent }
+  { path: "pass-reset/:token", component: PassResetComponent },
+  { path: "/all-updates", component: AllUpdatesComponent}
 ];
 
 @NgModule({

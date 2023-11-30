@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { EscalationDetailComponent } from './escalations/escalation-detail/escalation-detail.component';
+import { AllUpdatesComponent } from './all-updates/all-updates.component';
+import { UpdateDetailComponent } from './all-updates/update-detail/update-detail.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { EscalationDetailComponent } from './escalations/escalation-detail/escal
     LoginComponent,
     EscalationsComponent,
     PassResetComponent,
-    EscalationDetailComponent
+    EscalationDetailComponent,
+    AllUpdatesComponent,
+    UpdateDetailComponent
   ],
   imports: [
     BrowserModule,

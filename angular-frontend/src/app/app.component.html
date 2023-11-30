@@ -1,1 +1,10 @@
-<app-escalations></app-escalations>
+<header>
+    <div class="icon"></div>
+    <ul>
+        <li (click)="selectDash()" *ngIf="loggedIn">Dashboard</li>
+        <li (click)="selectUpdates()" *ngIf="loggedIn">All Updates</li>
+        <li (click)="logOut()" *ngIf="!loggedIn">Login</li>
+        <li (click)="logOut()" *ngIf="loggedIn">Logout</li>
+    </ul>
+</header>
+<router-outlet></router-outlet>
