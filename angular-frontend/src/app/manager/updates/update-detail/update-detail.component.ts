@@ -43,7 +43,19 @@ export class UpdateDetailComponent implements OnInit {
     this.text = this.domSanitizer.bypassSecurityTrustHtml(this.update.text);
     if (Array.isArray(this.update.files) && typeof this.update.files[0] === 'string') {
       this.fileUrls = this.update.files
-    }
+    };
+    this.httpService.getUserNames(this.update.acknowledged)
+      .subscribe((result: Array<string>) => {
+        this.update.acknowledged = result;
+      });
+    this.httpService.getUserNames(this.update.notAcknowledged)
+      .subscribe((result: Array<string>) => {
+        this.update.notAcknowledged = result;
+      })
+  }
+
+  chooseFiles(event: any) {
+    this.fileList = event.target.files;
   }
 
   updateUpdate(form: NgForm) {

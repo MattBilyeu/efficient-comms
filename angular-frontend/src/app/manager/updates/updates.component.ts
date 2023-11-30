@@ -45,7 +45,7 @@ export class UpdatesComponent implements OnInit {
       .subscribe((result: Response) => {
         this.alert = result.message;
         if (result.message === 'Update created.') {
-          this.updateComponent
+          this.updateComponent()
         }
       })
   }
