@@ -1,0 +1,79 @@
+import { Component, ElementRef, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Update } from 'src/app/models/update.model';
+import { DataService } from 'src/app/services/data.service';
+import { HttpService } from 'src/app/services/http.service';
+
+interface Response {
+  message: string
+}
+
+@Component({
+  selector: 'app-update-detail',
+  templateUrl: './update-detail.component.html',
+  styleUrls: ['./update-detail.component.css']
+})
+export class UpdateDetailComponent implements OnInit {
+  alert: string;
+  updated: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input('uId') uId: string;
+  @ViewChild('files') fileInput!: ElementRef;
+  update: Update;
+  fileUrls: string[] = [];
+  fileList: FileList;
+  text: SafeHtml;
+  editorConfig = {
+    base_url: "/tinymce",
+    suffix: ".min",
+    plugins: "lists link table",
+    toolbar: "numlist bullist link table"
+  };
+
+  constructor(private dataService: DataService,
+    private domSanitizer: DomSanitizer,
+    private httpService: HttpService) {}
+
+  ngOnInit() {
+    this.initializeComponent();
+  }
+
+  initializeComponent() {
+    this.update = this.dataService.team.updates.filter(u => u._Id === this.uId)[0];
+    this.text = this.domSanitizer.bypassSecurityTrustHtml(this.update.text);
+    if (Array.isArray(this.update.files) && typeof this.update.files[0] === 'string') {
+      this.fileUrls = this.update.files
+    }
+  }
+
+  updateUpdate(form: NgForm) {
+    let files;
+    if (this.fileList) {
+      files = this.fileList;
+    } else {
+      files = this.fileUrls;
+    }
+    this.httpService.updateUpdate(
+      this.uId,
+      this.fileList,
+      form.value.title,
+      form.value.text
+    ).subscribe((response: Response) => {
+      this.alert = response.message;
+      if (response.message === 'Update updated.') {
+        this.updated.emit(true);
+        this.initializeComponent();
+      }
+    })
+  }
+
+  deleteUpdate() {
+    this.httpService.deleteUpdate(this.uId)
+      .subscribe((response: Response) => {
+        this.alert = response.message;
+        if (response.message === 'Update deleted.') {
+          this.updated.emit(true);
+        }
+      })
+  }
+}

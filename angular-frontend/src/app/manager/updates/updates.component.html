@@ -1,1 +1,13 @@
-<p>updates works!</p>
+<div class="container">
+    <form #f="ngForm" (ngSubmit)="createUpdate(f)">
+        <div class="group">
+            <label for="title">Title: </label>
+            <input type="text" id="title" name="title" ngModel required>
+        </div>
+        <label for="files">Files:</label>
+        <input type="file" name="files" id="files" multiple ngModel (change)="chooseFiles($event)">
+        <editor [init]="editorConfig" id="note" name="note" ngModel required></editor>
+        <button type="submit">Create Update</button>
+    </form>
+</div>
+<app-update-detail (updated)="updateComponent()" *ngFor="let u of updates" [uId]="u._Id"></app-update-detail>

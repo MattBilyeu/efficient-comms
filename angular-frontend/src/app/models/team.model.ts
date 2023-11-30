@@ -3,7 +3,7 @@ import { Update } from "./update.model";
 import { User } from "./user.model";
 
 export class Team {
-    public id?: string;
+    public _Id?: string;
     public name: string;
     public escalations: Escalation[];
     public updates: Update[];

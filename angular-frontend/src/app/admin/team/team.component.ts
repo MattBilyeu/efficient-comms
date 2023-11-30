@@ -60,7 +60,7 @@ export class TeamComponent implements OnInit {
   reassignMembers(form: NgForm) {
     const targetTeamId = form.value.teamId;
     const userId = form.value.userId;
-    const oldTeamId = this.users.filter(user => user.id === userId).map(user => user.teamId)[0];
+    const oldTeamId = this.users.filter(user => user._Id === userId).map(user => user.teamId)[0];
     this.httpService.reassignMembers(targetTeamId, oldTeamId, userId)
       .subscribe((result: Response) => {
         this.updateComponent();

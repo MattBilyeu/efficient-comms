@@ -75,11 +75,11 @@ export class HttpService {
   }
 
   // Update related
-  createUpdate(files: File[], title: string, text: string) {
+  createUpdate(files: FileList, title: string, text: string) {
     return this.http.post('/update/createUpdate', {files: files, title: title, text: text})
   }
 
-  updateUpdate(id: string, files: File[], title: string, text: string) {
+  updateUpdate(id: string, files: FileList, title: string, text: string) {
     return this.http.post('/update/updateUpdate', {updateId: id, files: files, title: title, text: text})
   }
 

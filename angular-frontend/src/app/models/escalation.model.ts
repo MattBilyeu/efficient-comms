@@ -2,7 +2,7 @@ import { SafeHtml } from "@angular/platform-browser";
 import { Mixed } from "mongoose";
 
 export class Escalation {
-    public id?: string;
+    public _Id?: string;
     public title: string;
     public notes: string[] | SafeHtml[];
     public files: string[] | FileList;

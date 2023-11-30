@@ -12,7 +12,7 @@
     <form (ngSubmit)="updateTeamName(u)" #u="ngForm">
         <div class="group">
             <select name="teamId" id="teamId" ngModel required>
-                <option [value]="team.id" *ngFor="let team of teams">{{ team.name }}</option>
+                <option [value]="team._Id" *ngFor="let team of teams">{{ team.name }}</option>
             </select>
             <div>
                 <label for="newName">New Name:</label>
@@ -26,13 +26,13 @@
             <div>
                 <label for="userId">User:</label>
                 <select name="userId" id="userId" ngModel required>
-                    <option [value]="user.id" *ngFor="let user of users">{{ user.name }}</option>
+                    <option [value]="user._Id" *ngFor="let user of users">{{ user.name }}</option>
                 </select>
             </div>
             <div>
                 <label for="teamId">Team:</label>
                 <select name="teamId" id="teamId" ngModel required>
-                    <option [value]="team.id" *ngFor="let team of teams">{{ team.name }}</option>
+                    <option [value]="team._Id" *ngFor="let team of teams">{{ team.name }}</option>
                 </select>
             </div>
         </div>
@@ -45,7 +45,7 @@
         <div class="group">
             <label for="teamId">Team: </label>
             <select name="teamId" id="teamId" ngModel required>
-                <option [value]="team.id" *ngFor="let team of teams">{{ team.name }}</option>
+                <option [value]="team._Id" *ngFor="let team of teams">{{ team.name }}</option>
             </select>
         </div>
         <button type="submit">Delete Team</button>

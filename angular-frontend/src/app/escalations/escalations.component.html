@@ -10,5 +10,5 @@
         <editor [init]="editorConfig" id="note" name="note" ngModel required></editor>
         <button type="submit">Create Escalation</button>
     </form>
-    <app-escalation-detail (deleted)="updateComponent()" [eId]="e.id" *ngFor="let e of escalations"></app-escalation-detail>
+    <app-escalation-detail (deleted)="updateComponent()" [eId]="e._Id" *ngFor="let e of escalations"></app-escalation-detail>
 </div>
