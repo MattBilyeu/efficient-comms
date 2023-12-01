@@ -1,0 +1,11 @@
+header {
+    border-bottom: thin solid darkgrey
+}
+
+header.ul {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    justify-content: space-around
+}

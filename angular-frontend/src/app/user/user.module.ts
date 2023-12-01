@@ -7,6 +7,7 @@ import { UserComponent } from './user.component';
 import { FormsModule } from '@angular/forms';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { UpdateDetailComponent } from './updates/update-detail/update-detail.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { UpdateDetailComponent } from './updates/update-detail/update-detail.com
     CommonModule,
     UserRoutingModule,
     FormsModule,
-    EditorModule
+    EditorModule,
+    SharedModule
   ],
   providers: [{provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}],
   bootstrap: [UserComponent]

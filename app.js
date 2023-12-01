@@ -9,6 +9,8 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const mongoURI = require('./util/protected').mongoURI;
 const secret = require('./util/protected').secret;
 
+const User = require('./models/user');
+
 const authRoutes = require('./routes/login');
 const teamRoutes = require('./routes/team');
 const userRoutes = require('./routes/user');
@@ -33,7 +35,7 @@ const fileStorage = multer.diskStorage({
 });
 
 app.use(bodyParser.json());
-app(multer({storage: fileStorage}).array('pdf'));
+app.use(multer({storage: fileStorage}).array('pdf'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res, next) => {res.sendFile(path.join(__dirname, 'public', 'index.html'))});

@@ -18,7 +18,7 @@ export class HttpService {
 
   // Login/Logout Related
   login(loginData: {email: string, password: string}) {
-    return this.http.post('auth/login', loginData);
+    return this.http.post('/login/login', loginData);
   }
 
   logout() {

@@ -8,6 +8,7 @@ import { ManagerComponent } from './manager.component';
 import { UpdateDetailComponent } from './updates/update-detail/update-detail.component';
 import { FormsModule } from '@angular/forms';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
     CommonModule,
     ManagerRoutingModule,
     FormsModule,
-    EditorModule
+    EditorModule,
+    SharedModule
   ],
   providers: [{provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}],
   bootstrap: [ManagerComponent]
