@@ -37,12 +37,12 @@ export class TeamComponent implements OnInit {
       } else {
         this.dataService.adminTeamOb = response;
         this.alert = undefined;
-      }
+      };
+      this.teams = this.dataService.adminTeamOb;
+      this.dataService.adminTeamOb.forEach(team => {
+        this.users = this.users.concat(team.users);
+      })
     });
-    this.teams = this.dataService.adminTeamOb;
-    this.dataService.adminTeamOb.forEach(team => {
-      this.users = this.users.concat(team.users);
-    })
   }
 
   createTeam(form: NgForm) {
@@ -54,13 +54,13 @@ export class TeamComponent implements OnInit {
   }
 
   updateTeamName(form: NgForm) {
-    this.httpService.updateTeamName(form.value.name, form.value.teamId)
+    this.httpService.updateTeamName(form.value.newName, form.value.teamId)
   }
 
   reassignMembers(form: NgForm) {
     const targetTeamId = form.value.teamId;
     const userId = form.value.userId;
-    const oldTeamId = this.users.filter(user => user._Id === userId).map(user => user.teamId)[0];
+    const oldTeamId = this.users.filter(user => user._id === userId).map(user => user.teamId)[0];
     this.httpService.reassignMembers(targetTeamId, oldTeamId, userId)
       .subscribe((result: Response) => {
         this.updateComponent();
@@ -73,7 +73,7 @@ export class TeamComponent implements OnInit {
   }
 
   deleteTeam(form: NgForm) {
-    const confirmation = prompt('Are you sure you want to delete this team?  This is a destructive and irreversable action.');
+    const confirmation = confirm('Are you sure you want to delete this team?  This is a destructive and irreversable action.');
     if (confirmation) {
       this.httpService.deleteTeam(form.value.teamId)
         .subscribe((result: Response) => {

@@ -93,6 +93,7 @@ exports.reassignMembers = (req, res, next) => {
 };
 
 exports.deleteTeam = (req, res, next) => {
+    console.log(req.body);
     Team.findById(req.body.teamId)
         .populate('escalations')
         .populate('updates')
@@ -100,8 +101,12 @@ exports.deleteTeam = (req, res, next) => {
             if (team.users.length > 0) {
                 return res.status(422).json({message: 'Cannot delete a team with users.'})
             };
-            deleteFiles(team.updates.files);
-            deleteFiles(team.escalations.files);
+            if (team.updates.files) {
+                deleteFiles(team.updates.files);
+            }
+            if (team.escalations.files) {
+                deleteFiles(team.escalations.files);
+            }
             Team.findByIdAndDelete(req.body.teamId)
                 .then(result => {
                     Escalation.find()

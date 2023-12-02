@@ -39,7 +39,7 @@ export class UpdateDetailComponent implements OnInit {
   }
 
   initializeComponent() {
-    this.update = this.dataService.team.updates.filter(u => u._Id === this.uId)[0];
+    this.update = this.dataService.team.updates.filter(u => u._id === this.uId)[0];
     this.text = this.domSanitizer.bypassSecurityTrustHtml(this.update.text);
     if (Array.isArray(this.update.files) && typeof this.update.files[0] === 'string') {
       this.fileUrls = this.update.files

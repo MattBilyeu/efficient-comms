@@ -26,7 +26,7 @@ export class UpdatesComponent implements OnInit {
   updateComponent() {
     this.updates = this.dataService.team.updates.filter(update => {
       const foundIndex = update.notAcknowledged.findIndex((Id)=> {
-        return this.dataService.user._Id === Id
+        return this.dataService.user._id === Id
       });
       return foundIndex !== -1
     })

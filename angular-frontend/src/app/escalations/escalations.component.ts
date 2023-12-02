@@ -49,7 +49,7 @@ export class EscalationsComponent implements OnInit {
     let filteredEscalations: Escalation[];
     arr.forEach(e => {
       if (
-        e.stage === 'Member' && e.ownerId === this.dataService.user._Id ||
+        e.stage === 'Member' && e.ownerId === this.dataService.user._id ||
         e.stage === 'Peer Review' && this.dataService.user.peerReviewer ||
         e.stage === 'Manager' && this.dataService.user.role === 'Manager'
       ) {
@@ -69,7 +69,7 @@ export class EscalationsComponent implements OnInit {
       [form.value.note],
       this.fileList,
       this.dataService.user.teamId,
-      this.dataService.user._Id,
+      this.dataService.user._id,
       this.dataService.user.name,
       ''
     );

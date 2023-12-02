@@ -36,7 +36,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   routeUser(role: string) {
     if (role === 'Admin') {
-      console.log('Admin route selected.')
       this.router.navigate(['/admin'])
     } else if (role === 'Manager') {
       this.router.navigate(['/manager'])

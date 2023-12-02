@@ -33,7 +33,7 @@ export class EscalationDetailComponent implements OnInit{
               private httpService: HttpService) {}
 
   ngOnInit() {
-    this.escalation = this.dataService.team.escalations.filter(e => e._Id === this.eId)[0];
+    this.escalation = this.dataService.team.escalations.filter(e => e._id === this.eId)[0];
     if (Array.isArray(this.escalation.files) && typeof this.escalation.files[0] === 'string') {
       this.fileUrls = this.escalation.files
     };

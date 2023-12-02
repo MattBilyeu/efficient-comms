@@ -13,9 +13,10 @@ const crypto = require('crypto');
 exports.createUser = (req, res, next) => {
     const name = req.body.name;
     const email = req.body.email;
-    const password = req.body.password;
+    const password = 'TempPassword';
     const role = req.body.role;
     const teamId = req.body.teamId;
+    let savedUser;
     User.findOne({email: email})
         .then(user => {
             if (user) {
@@ -34,7 +35,20 @@ exports.createUser = (req, res, next) => {
                 });
                 newUser.save()
                     .then(result => {
-                        res.status(201).json({message: 'User created.'})
+                        savedUser = result;
+                        Team.findById(teamId)
+                            .then(team => {
+                                team.users.push(savedUser._id);
+                                team.save()
+                                    .then(result => {
+                                        res.status(201).json({message: 'User created.'})
+                                    })
+                                    .catch(err => {
+                                        console.log(err);
+                                        next(new Error('Server error - unable to save team.'))
+                                    })
+                            })
+
                     })
                     .catch(err => {
                         console.log(err);
@@ -57,10 +71,11 @@ exports.updateUser = (req, res, next) => {
     const email = req.body.email;
     const peerReview = req.body.peerReview;
     const role = req.body.role;
+    const userId = req.body.userId;
     if (req.session.role !== 'Admin' || req.session.role !== 'Manager') {
         return res.status(403).json({message: 'Unauthorized to update users.'})
     };
-    User.findOne({email: email})
+    User.findById(userId)
         .then(user => {
             if (!user) {
                 return res.status(404).json({message: 'User not found.'})

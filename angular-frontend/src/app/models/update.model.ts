@@ -1,5 +1,5 @@
 export class Update {
-    public _Id?: string;
+    public _id?: string;
     public teamId: string;
     public title: string;
     public text: string;

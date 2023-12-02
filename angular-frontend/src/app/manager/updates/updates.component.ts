@@ -33,7 +33,7 @@ export class UpdatesComponent implements OnInit {
   }
 
   updateComponent() {
-    this.httpService.getPopulatedTeam(this.dataService.team._Id)
+    this.httpService.getPopulatedTeam(this.dataService.team._id)
   }
 
   chooseFiles(event: any) {

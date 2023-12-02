@@ -17,17 +17,23 @@ interface Response {
 export class UserComponent implements OnInit {
   deleteActive: boolean = false;
   alert: string;
-  users: User[];
+  users: User[] = [];
   teams: Team[];
+  selectedUser: User;
+  selectedUserId: string;
 
   constructor(private dataService: DataService,
               private httpService: HttpService) {}
 
   ngOnInit() {
     this.teams = this.dataService.adminTeamOb;
-    this.dataService.adminTeamOb.forEach(team => {
+    console.log('teams data', this.teams);
+    this.teams.forEach(team => {
       this.users = this.users.concat(team.users);
-    })
+    });
+    if (this.users) {
+      this.selectedUser = this.users[0]
+    }
   };
 
   updateComponent() {
@@ -39,7 +45,10 @@ export class UserComponent implements OnInit {
         this.teams = this.dataService.adminTeamOb;
         this.dataService.adminTeamOb.forEach(team => {
           this.users = this.users.concat(team.users);
-        })
+        });
+        if (this.users) {
+          this.selectedUser = this.users[0]
+        }
       }
     })
   };
@@ -69,12 +78,17 @@ export class UserComponent implements OnInit {
     }
   };
 
+  selectUser() {
+    this.selectedUser = this.users.filter(user => user._id === this.selectedUserId)[0]
+  }
+
   updateUser(form: NgForm) {
     const name = form.value.name;
     const email = form.value.email;
     const peerReviewer = form.value.peerReviewer;
     const role = form.value.role;
-    this.httpService.updateuser(name, email, peerReviewer, role)
+    const userId = form.value.userId;
+    this.httpService.updateUser(userId, name, email, peerReviewer, role)
       .subscribe((response: Response) => {
         this.alert = response.message
         if (response.message === 'User updated.') {
@@ -84,7 +98,7 @@ export class UserComponent implements OnInit {
   };
 
   deleteUser(form: NgForm) {
-    const confirmation = prompt('Are you sure you want to delete this user?  This is a destructive and irreversable action.');
+    const confirmation = confirm('Are you sure you want to delete this user?  This is a destructive and irreversable action.');
     if (confirmation) {
       this.httpService.deleteUser(form.value.id).subscribe((response: Response) => {
         this.alert = response.message;
