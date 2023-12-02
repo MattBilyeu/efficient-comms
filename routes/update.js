@@ -4,12 +4,12 @@ const router = express.Router();
 
 const updateController = require('../controllers/update');
 
-router.post('/create', updateController.createUpdate);
+router.post('/createUpdate', updateController.createUpdate);
 
-router.post('/update', updateController.updateUpdate);
+router.post('/updateUpdate', updateController.updateUpdate);
 
-router.post('/acknowledge', updateController.acknowledgeUpdate);
+router.post('/acknowledgeUpdate', updateController.acknowledgeUpdate);
 
-router.post('/delete', updateController.deleteUpdate);
+router.post('/deleteUpdate', updateController.deleteUpdate);
 
 module.exports = router;

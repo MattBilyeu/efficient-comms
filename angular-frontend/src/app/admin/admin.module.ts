@@ -19,7 +19,6 @@ import { FormsModule } from '@angular/forms';
     AdminRoutingModule,
     FormsModule
   ],
-  providers: [],
-  bootstrap: [AdminComponent]
+  providers: []
 })
 export class AdminModule { }

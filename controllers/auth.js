@@ -9,7 +9,7 @@ exports.postLogin = (req, res, next) => {
     let user;
     User.find({email: email})
         .then(foundUser => {
-            user = foundUser;
+            user = foundUser[0];
             if (!user) {
                 return res.status(422).json({message: 'Email and password combination not found.'})
             };
@@ -22,7 +22,8 @@ exports.postLogin = (req, res, next) => {
                     req.session.userId = user._Id;
                     req.session.role = user.role;
                     req.session.name = user.name;
-                    Team.findById(user.teamId)
+                    if (user.teamId !== 'Admin') {
+                        Team.findById(user.teamId)
                         .populate('users')
                         .populate('escalations')
                         .populate('updates')
@@ -32,6 +33,10 @@ exports.postLogin = (req, res, next) => {
                             const package = {team: team, user: user};
                             res.status(200).json(package);
                         })
+                    } else {
+                        const adminPackage = {team: undefined, user: user};
+                        res.status(200).json(adminPackage);
+                    }
                 })
         })
         .catch(err => {

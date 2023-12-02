@@ -96,7 +96,7 @@ export class HttpService {
     return this.http.post('/user/createUser', user)
   }
 
-  updateuser(name: string, email: string, peerReviewer: boolean, role: string) {
+  updateUser(name: string, email: string, peerReviewer: boolean, role: string) {
     const updateData = {
       name: name,
       email: email,

@@ -8,6 +8,7 @@ const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const mongoURI = require('./util/protected').mongoURI;
 const secret = require('./util/protected').secret;
+const bcrypt = require('bcrypt');
 
 const User = require('./models/user');
 
@@ -38,8 +39,6 @@ app.use(bodyParser.json());
 app.use(multer({storage: fileStorage}).array('pdf'));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res, next) => {res.sendFile(path.join(__dirname, 'public', 'index.html'))});
-
 app.use(
     session({
         secret: secret,
@@ -63,6 +62,25 @@ app.use((error, req, res, next) => {
         res.status(400).json(error);
     }
 });
+
+app.get('**', (req, res, next) => {res.sendFile(path.join(__dirname, 'public', 'index.html'))});
+
+User.find().then(users => {
+    if (users.length === 0) {
+        bcrypt.hash('TempPassword', 12)
+            .then(hashedPassword => {
+                const newAdmin = new User({
+                    name: 'Admin',
+                    email: 'Admin@Admin.com',
+                    password: hashedPassword,
+                    role: 'Admin',
+                    teamId: 'Admin',
+                    peerReviewer: false
+                });
+                newAdmin.save();
+            })
+    }
+})
 
 mongoose
     .connect(mongoURI)

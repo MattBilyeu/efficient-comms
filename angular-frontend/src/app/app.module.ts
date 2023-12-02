@@ -10,6 +10,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { AllUpdatesComponent } from './all-updates/all-updates.component';
 import { UpdateDetailComponent } from './all-updates/update-detail/update-detail.component';
+import { AdminModule } from './admin/admin.module';
+import { ManagerModule } from './manager/manager.module';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { UpdateDetailComponent } from './all-updates/update-detail/update-detail
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    EditorModule
+    EditorModule,
+    AdminModule,
+    ManagerModule,
+    UserModule
   ],
   providers: [{provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}],
   bootstrap: [AppComponent]

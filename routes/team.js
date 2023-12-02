@@ -4,13 +4,13 @@ const router = express.Router();
 
 const teamController = require('../controllers/team');
 
-router.post('/create', teamController.createTeam);
+router.post('/createTeam', teamController.createTeam);
 
-router.post('/updateName', teamController.updateTeamName);
+router.post('/updateTeamName', teamController.updateTeamName);
 
-router.post('/reassign', teamController.reassignMembers);
+router.post('/reassignMembers', teamController.reassignMembers);
 
-router.post('/delete', teamController.deleteTeam);
+router.post('/deleteTeam', teamController.deleteTeam);
 
 router.post('/getPopulatedTeam', teamController.getPopulatedTeam);
 

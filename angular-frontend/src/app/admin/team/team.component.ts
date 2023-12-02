@@ -16,7 +16,7 @@ interface Response {
 })
 export class TeamComponent implements OnInit {
   alert: string;
-  users: User[];
+  users: User[] = [];
   teams: Team[];
   deleteActive: boolean = false;
 

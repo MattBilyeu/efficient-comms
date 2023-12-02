@@ -19,7 +19,7 @@ const routes: Routes = [
     loadChildren: ()=> import("./user/user.module").then(m => m.UserModule)
   },
   { path: "pass-reset/:token", component: PassResetComponent },
-  { path: "/all-updates", component: AllUpdatesComponent}
+  { path: "all-updates", component: AllUpdatesComponent}
 ];
 
 @NgModule({

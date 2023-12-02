@@ -4,10 +4,10 @@ const router = express.Router();
 
 const escalationController = require('../controllers/escalation');
 
-router.post('/create', escalationController.createEscalation);
+router.post('/createEscalation', escalationController.createEscalation);
 
-router.post('/advance', escalationController.advanceEscalation);
+router.post('/advanceEscalation', escalationController.advanceEscalation);
 
-router.post('/delete', escalationController.deleteEscalation);
+router.post('/deleteEscalation', escalationController.deleteEscalation);
 
 module.exports = router;

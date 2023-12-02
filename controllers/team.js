@@ -13,7 +13,7 @@ exports.createTeam = (req, res, next) => {
     });
     newTeam.save()
         .then(result => res.status(201).json({message: 'Team created.'}))
-        .catach(err => {
+        .catch(err => {
             console.log(err);
             next(new Error('Server error - team not created.'))
         })
