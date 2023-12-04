@@ -39,6 +39,7 @@ export class TeamComponent implements OnInit {
         this.alert = undefined;
       };
       this.teams = this.dataService.adminTeamOb;
+      this.users = [];
       this.dataService.adminTeamOb.forEach(team => {
         this.users = this.users.concat(team.users);
       })
@@ -55,6 +56,12 @@ export class TeamComponent implements OnInit {
 
   updateTeamName(form: NgForm) {
     this.httpService.updateTeamName(form.value.newName, form.value.teamId)
+      .subscribe((result: Response) => {
+        this.alert = result.message;
+        if (result.message !== 'Team name updates.') {
+          this.updateComponent();
+        }
+      });
   }
 
   reassignMembers(form: NgForm) {

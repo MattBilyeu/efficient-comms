@@ -3,7 +3,7 @@ const userPassword = require('./protected').emailPassword;
 
 const nodeMailer = require('nodemailer');
 
-module.exports = sendEmail = function(arr, subject, body) {
+const sendEmail = function(arr, subject, body) {
     const transporter = nodeMailer.createTransport({
         host: 'smtp.gmail.com',
         auth: {
@@ -13,7 +13,7 @@ module.exports = sendEmail = function(arr, subject, body) {
     });
 
     const info = {
-        from: 'Matt <matt.bilyeu1@gmail.com>',
+        from: 'no-reply@efficient-comms.com',
         to: 'will be reset',
         subject: subject,
         html: body
@@ -22,7 +22,11 @@ module.exports = sendEmail = function(arr, subject, body) {
     arr.forEach(email => {
         info.to = email;
         transporter.sendMail(info, (err) => {
-            console.log(err);
+            if (err) {
+                console.log(err);
+            }
         })
     })
 }
+
+module.exports = {send: sendEmail};

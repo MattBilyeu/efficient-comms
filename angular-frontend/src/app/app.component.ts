@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { LoginService } from './services/login.service';
 import { DataService } from './services/data.service';
 import { Subscription } from 'rxjs';
@@ -18,20 +18,28 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router,
               private loginService: LoginService,
-              private dataService: DataService) {}
+              private dataService: DataService,
+              private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.router.navigate['/login'];
-    this.loginService.loggedIn.subscribe(response => {
-      this.loggedIn = response;
-      if (!response) {
+    this.route.url.subscribe(segments => {
+      console.log(segments);
+      const hasReset = segments.filter(segment => segment.toString() === 'reset');
+      if (hasReset.length === 0) {
         this.router.navigate['/login'];
-      } else {
-        this.tabSelected = 'dash';
-        this.routeUser(this.dataService.user.role);
+        this.loginService.loggedIn.subscribe(response => {
+          this.loggedIn = response;
+          console.log(response);
+          if (!response) {
+            this.router.navigate(['']);
+          } else {
+            this.tabSelected = 'dash';
+            this.routeUser(this.dataService.user.role);
+          }
+        });
+        this.loginService.autoLogin();
       }
-    });
-    this.loginService.autoLogin();
+    })
   }
 
   routeUser(role: string) {

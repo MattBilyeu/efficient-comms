@@ -53,13 +53,10 @@ export class LoginService {
   }
 
   logout() {
-    this.httpService.logout()
-      .subscribe((response) => {
-        if (response) {
-          this.dataService.team = undefined;
-          this.dataService.user = undefined;
-          this.loggedIn.next(false);
-        }
-      })
+    this.httpService.logout().subscribe();
+    this.dataService.team = undefined;
+    this.dataService.user = undefined;
+    localStorage.removeItem('loginData');
+    this.loggedIn.next(false);
   }
 }

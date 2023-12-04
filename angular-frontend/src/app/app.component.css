@@ -1,11 +1,28 @@
 header {
-    border-bottom: thin solid darkgrey
+    border-bottom: thin solid darkgrey;
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
 }
 
-header.ul {
+header ul {
+    display: flex;
+    justify-content: space-around
+}
+
+header li {
     list-style: none;
     display: flex;
     flex-direction: row;
     padding: 0;
-    justify-content: space-around
+    justify-content: space-around;
+    padding: 1rem;
+    cursor: pointer;
+    padding: 1rem;
+    background-color: var(--primary-color);
+}
+
+header .icon img {
+    width: 50px;
+    height: 50px;
 }

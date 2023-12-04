@@ -20,6 +20,7 @@ exports.createTeam = (req, res, next) => {
 };
 
 exports.updateTeamName = (req, res, next) => {
+    console.log(req.body.teamId);
     Team.findById(req.body.teamId)
         .then(team => {
             team.name = req.body.name;

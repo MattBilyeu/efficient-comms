@@ -27,7 +27,6 @@ export class UserComponent implements OnInit {
 
   ngOnInit() {
     this.teams = this.dataService.adminTeamOb;
-    console.log('teams data', this.teams);
     this.teams.forEach(team => {
       this.users = this.users.concat(team.users);
     });
@@ -43,6 +42,7 @@ export class UserComponent implements OnInit {
       } else {
         this.dataService.adminTeamOb = response;
         this.teams = this.dataService.adminTeamOb;
+        this.users = [];
         this.dataService.adminTeamOb.forEach(team => {
           this.users = this.users.concat(team.users);
         });
@@ -100,7 +100,7 @@ export class UserComponent implements OnInit {
   deleteUser(form: NgForm) {
     const confirmation = confirm('Are you sure you want to delete this user?  This is a destructive and irreversable action.');
     if (confirmation) {
-      this.httpService.deleteUser(form.value.id).subscribe((response: Response) => {
+      this.httpService.deleteUser(form.value.userId).subscribe((response: Response) => {
         this.alert = response.message;
         if (response.message === 'User deleted.') {
           this.updateComponent();

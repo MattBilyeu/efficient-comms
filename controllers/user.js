@@ -3,12 +3,39 @@ const Team = require('../models/team');
 const Escalation = require('../models/escalation');
 const Update = require('../models/update');
 
-const emailer = require('../util/emailer');
-
-const send = emailer.sendEmail;
+const { send } = require('../util/emailer');
 
 const bcrypt = require('bcrypt');
 const crypto = require('crypto'); 
+
+sendNewUserEmail = function(email) {
+    crypto.randomBytes(32, (err, buffer) => {
+        if (err) {
+            console.log(err);
+            next(new Error('Error creating reset token.'));
+        };
+        const token = buffer.toString('hex');
+        User.findOne({email: email})
+            .then(user => {
+                user.resetToken = token;
+                user.tokenExpiration = Date.now() + 3600000;
+                return user.save();
+            })
+            .then(result => {
+                const html =                     
+                    `
+                        <h1>New User</h1>
+                        <p>The first step is to update your password.</p>
+                        <p>Click this <a href="http://localhost:3000/pass-reset/${token}">link</a> to set a new password.</p>
+                    `;
+                send([email], 'Welcome to Efficient Comms!',html);
+            })
+            .catch(err => {
+                console.log(err);
+                next(new Error('Error in server query.'))
+            })
+    })
+};
 
 exports.createUser = (req, res, next) => {
     const name = req.body.name;
@@ -36,6 +63,7 @@ exports.createUser = (req, res, next) => {
                 newUser.save()
                     .then(result => {
                         savedUser = result;
+                        sendNewUserEmail(savedUser.email);
                         Team.findById(teamId)
                             .then(team => {
                                 team.users.push(savedUser._id);
@@ -72,7 +100,7 @@ exports.updateUser = (req, res, next) => {
     const peerReview = req.body.peerReview;
     const role = req.body.role;
     const userId = req.body.userId;
-    if (req.session.role !== 'Admin' || req.session.role !== 'Manager') {
+    if (req.session.role !== 'Admin' && req.session.role !== 'Manager') {
         return res.status(403).json({message: 'Unauthorized to update users.'})
     };
     User.findById(userId)
@@ -113,11 +141,11 @@ exports.sendReset = (req, res, next) => {
                 return user.save();
             })
             .then(result => {
-                send(req.body.email, 'no-reply@efficient-comms.com', 'Password Reset',
+                send([req.body.email], 'Password Reset',
                     `
                         <h1>Password Reset</h1>
                         <p>You requested a password reset.</p>
-                        <p>Click this <a href="http://localhost:3000/reset/${token}">link</a> to set a new password.</P.
+                        <p>Click this <a href="http://localhost:3000/pass-reset/${token}">link</a> to set a new password.</p>
                     `
                 );
                 res.status(200).json({message: 'Password Reset Sent - Please check your email.'})
@@ -133,6 +161,7 @@ exports.resetPassword = (req, res, next) => {
     const token = req.body.token;
     const password = req.body.password;
     let foundUser;
+    console.log(token);
     User.findOne({resetToken: token, resetTokenExpiration: {$gt: Date.now()}})
         .then(user => {
             foundUser = user;

@@ -1,8 +1,8 @@
 <header>
-    <div class="icon"></div>
+    <div class="icon"><img src="../assets/efficient-comms-logo.png" alt="Efficient Comms"></div>
     <ul>
         <li (click)="selectDash()" *ngIf="loggedIn">Dashboard</li>
-        <li (click)="selectUpdates()" *ngIf="loggedIn">All Updates</li>
+        <li (click)="selectUpdates()" *ngIf="loggedIn && role !== 'Admin'">All Updates</li>
         <li (click)="logOut()" *ngIf="!loggedIn">Login</li>
         <li (click)="logOut()" *ngIf="loggedIn">Logout</li>
     </ul>

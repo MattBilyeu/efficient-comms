@@ -5,6 +5,10 @@ body {
     box-sizing: border-box;
 }
 
+:root {
+    --primary-color: #f38701;
+}
+
 .container {
     display: flex;
     flex-direction: column;

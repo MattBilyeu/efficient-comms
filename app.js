@@ -80,7 +80,7 @@ User.find().then(users => {
                 newAdmin.save();
             })
     }
-})
+});
 
 mongoose
     .connect(mongoURI)
