@@ -97,7 +97,7 @@ exports.createUser = (req, res, next) => {
 exports.updateUser = (req, res, next) => {
     const name = req.body.name;
     const email = req.body.email;
-    const peerReview = req.body.peerReview;
+    const peerReviewer = req.body.peerReviewer;
     const role = req.body.role;
     const userId = req.body.userId;
     if (req.session.role !== 'Admin' && req.session.role !== 'Manager') {
@@ -110,7 +110,7 @@ exports.updateUser = (req, res, next) => {
             };
             user.name = name;
             user.email = email;
-            user.peerReview = peerReview;
+            user.peerReviewer = peerReviewer;
             user.role = role;
             user.save()
                 .then(result => {
@@ -161,9 +161,11 @@ exports.resetPassword = (req, res, next) => {
     const token = req.body.token;
     const password = req.body.password;
     let foundUser;
-    console.log(token);
-    User.findOne({resetToken: token, resetTokenExpiration: {$gt: Date.now()}})
+    User.findOne({resetToken: token})
         .then(user => {
+            if (user.resetTokenExpiration < Date.now()) {
+                return res.status(422).json({message: 'Unauthorized token.'})
+            };
             foundUser = user;
             bcrypt.hash(password, 12)
                 .then(hashedPassword => {

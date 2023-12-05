@@ -24,15 +24,15 @@
         </select>
         <div class="group">
             <label for="name">Name: </label>
-            <input [value]="selectedUser.name" type="text" id="name" name="name" ngModel required>
+            <input [(ngModel)]="selectedUser.name" type="text" id="name" name="name" ngModel required>
         </div>
         <div class="group">
             <label for="email">Email: </label>
-            <input [value]="selectedUser.email" type="email" id="email" name="email" ngModel required>
+            <input [(ngModel)]="selectedUser.email" type="email" id="email" name="email" ngModel required>
         </div>
         <div class="group">
             <label for="role">Role: </label>
-            <select name="role" id="role" ngModel required>
+            <select name="role" id="role" ngModel required [(ngModel)]="selectedUser.role">
                 <option value="Admin">Admin</option>
                 <option value="Manager">Manager</option>
                 <option value="User">User</option>
@@ -40,15 +40,15 @@
         </div>
         <div class="group">
             <label for="peerReviewer">Peer Reviewer: </label>
-            <select name="peerReviewer" id="peerReviewer" ngModel required>
-                <option value="true">True</option>
-                <option value="false">False</option>
+            <select name="peerReviewer" id="peerReviewer" ngModel required [(ngModel)]="selectedUser.peerReviewer">
+                <option [ngValue]="true">True</option>
+                <option [ngValue]="false">False</option>
             </select>
         </div>
         <button type="submit">Update User</button>
     </form>
     <div *ngIf="!deleteActive">
-        <h1>Need to delete a team?</h1>
+        <h1>Need to delete a user?</h1>
         <button (click)="activateDelete()">Activate Delete Form</button>
     </div>
     <form *ngIf="deleteActive" (ngSubmit)="deleteUser(d)" #d="ngForm">
@@ -58,6 +58,6 @@
                 <option [value]="user._id" *ngFor="let user of users">{{ user.name }}</option>
             </select>
         </div>
-        <button type="submit">Delete Team</button>
+        <button type="submit">Delete User</button>
     </form>
 </div>

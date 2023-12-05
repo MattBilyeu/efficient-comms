@@ -29,7 +29,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.navigate['/login'];
         this.loginService.loggedIn.subscribe(response => {
           this.loggedIn = response;
-          console.log(response);
           if (!response) {
             this.router.navigate(['']);
           } else {

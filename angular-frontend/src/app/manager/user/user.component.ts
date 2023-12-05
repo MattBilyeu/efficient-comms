@@ -30,7 +30,8 @@ export class UserComponent implements OnInit {
   updateComponent() {
     this.users = this.dataService.team.users;
     if (this.users) {
-      this.selectedUser = this.users[0]
+      this.selectedUser = this.users[0];
+      this.selectedUserId = this.users[0]._id;
     }
   }
 
