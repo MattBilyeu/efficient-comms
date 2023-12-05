@@ -202,6 +202,7 @@ exports.findUserById = (req, res, next) => {
 };
 
 exports.deleteUser = (req, res, next) => {
+    console.log('Middleware accessed.')
     const userId = req.body.userId;
     let teamId;
     let updateIds;

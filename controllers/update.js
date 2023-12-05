@@ -2,17 +2,20 @@ const Update = require('../models/update');
 const Team = require('../models/team');
 const deleteFiles = require('../util/files').deleteFiles;
 
-const send = require('../util/emailer').sendEmail;
+const { send } = require('../util/emailer');
 
 const sendMailList = function(array, subject, body) {
     array.forEach(email => {
-        send(email, subject, body)
+        send([email], subject, body)
     })
 };
 
 exports.createUpdate = (req, res, next) => {
     const userId = req.session.userId;
-    const files = req.files.map((file) => '/files/' + file.filename);
+    let files = [];
+    if (req.files) {
+        files = req.files.map((file) => '/files/' + file.filename);
+    };
     const teamId = req.session.teamId;
     const title = req.body.title;
     const text = req.body.text;
@@ -23,14 +26,15 @@ exports.createUpdate = (req, res, next) => {
         return res.status(403).json({message: 'You are not authorized to create updates.'})
     };
     Team.findById(teamId)
-        .populate(users)
+        .populate('users')
         .then(team => {
-            const emailList = team.users.map((user) => {user.email});
+            const emailList = team.users.map((user) => user.email);
+            console.log(team, emailList);
             sendMailList(emailList, `New Update - ${title}`, '<p>You have a new update ready for review.</p>');
             notAcknowledged = 
                 team.users
-                    .map((user)=> user._Id)
-                    .filter(_Id => _Id !== userId);
+                    .map((user)=> user._id)
+                    .filter(_id => _id !== userId);
             notAcknowledged = team.users;
             const newUpdate = new Update({
                 teamId: teamId,
@@ -42,7 +46,7 @@ exports.createUpdate = (req, res, next) => {
             });
             newUpdate.save()
                 .then(result => {
-                    team.updates.push(result._Id);
+                    team.updates.push(result._id);
                     team.save()
                         .then(result => {
                             res.status(201).json({message: 'Update created.'})
@@ -85,7 +89,7 @@ exports.updateUpdate = (req, res, next) => {
             changedUpdate = update;
             Team.findById(teamId).populate('users').then(team => {
                 emailList = team.users.map((user) => user.email);
-                changedUpdate.notAcknowledged = team.users.map((userObj) => userObj._Id).filter((_Id => _Id !== userId));
+                changedUpdate.notAcknowledged = team.users.map((userObj) => userObj._id).filter((_id => _id !== userId));
                 changedUpdate.save()
                     .then(result => {
                         sendMailList(emailList, `Update Changed - ${title}`, '<p>An update has been deleted, please review again.</p>');

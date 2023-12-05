@@ -6,7 +6,7 @@
         </div>
         <label for="files">Files:</label>
         <input type="file" name="files" id="files" multiple ngModel (change)="chooseFiles($event)">
-        <editor [init]="editorConfig" id="note" name="note" ngModel required></editor>
+        <editor [init]="editorConfig" id="text" name="text" ngModel required></editor>
         <button type="submit">Create Update</button>
     </form>
 </div>

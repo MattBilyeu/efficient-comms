@@ -82,7 +82,7 @@ export class UserComponent implements OnInit {
   deleteUser(form: NgForm) {
     const confirmation = confirm('Are you sure you want to delete this user?  This is a destructive and irreversable action.');
     if (confirmation) {
-      this.httpService.deleteUser(form.value.id).subscribe((response: Response) => {
+      this.httpService.deleteUser(form.value.userId).subscribe((response: Response) => {
         this.alert = response.message;
         if (response.message === 'User deleted.') {
           this.updateComponent();

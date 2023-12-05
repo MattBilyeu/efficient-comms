@@ -41,6 +41,7 @@ export class UpdatesComponent implements OnInit {
   }
 
   createUpdate(form: NgForm) {
+    console.log(form.value);
     this.httpService.createUpdate(this.files, form.value.title, form.value.text)
       .subscribe((result: Response) => {
         this.alert = result.message;
