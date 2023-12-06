@@ -29,6 +29,7 @@ export class UpdateDetailComponent implements OnInit {
     plugins: "lists link table",
     toolbar: "numlist bullist link table"
   };
+  editText: boolean = false;
 
   constructor(private dataService: DataService,
     private domSanitizer: DomSanitizer,
@@ -46,12 +47,18 @@ export class UpdateDetailComponent implements OnInit {
     };
     this.httpService.getUserNames(this.update.acknowledged)
       .subscribe((result: Array<string>) => {
+        console.log('Acknowledged Array: ', result);
         this.update.acknowledged = result;
       });
     this.httpService.getUserNames(this.update.notAcknowledged)
       .subscribe((result: Array<string>) => {
+        console.log('Not Acknowledged Array: ', result);
         this.update.notAcknowledged = result;
       })
+  }
+
+  toggleEditText() {
+    this.editText = !this.editText;
   }
 
   chooseFiles(event: any) {

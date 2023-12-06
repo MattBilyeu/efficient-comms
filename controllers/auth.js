@@ -18,8 +18,9 @@ exports.postLogin = (req, res, next) => {
                     if (!doMatch) {
                         return res.status(422).json({message: 'Email and password combination not found.'})
                     };
+                    const stringifiedUserId = user._id.toString();
                     req.session.teamId = user.teamId;
-                    req.session.userId = user._Id;
+                    req.session.userId = stringifiedUserId;
                     req.session.role = user.role;
                     req.session.name = user.name;
                     if (user.teamId !== 'Admin') {

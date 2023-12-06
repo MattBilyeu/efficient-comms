@@ -22,7 +22,6 @@ import { SharedModule } from '../shared/shared.module';
     EditorModule,
     SharedModule
   ],
-  providers: [{provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}],
-  bootstrap: [UserComponent]
+  providers: [{provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}]
 })
 export class UserModule { }

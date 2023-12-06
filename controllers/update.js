@@ -11,7 +11,6 @@ const sendMailList = function(array, subject, body) {
 };
 
 exports.createUpdate = (req, res, next) => {
-    const userId = req.session.userId;
     let files = [];
     if (req.files) {
         files = req.files.map((file) => '/files/' + file.filename);
@@ -19,7 +18,7 @@ exports.createUpdate = (req, res, next) => {
     const teamId = req.session.teamId;
     const title = req.body.title;
     const text = req.body.text;
-    const acknowledged = [userId];
+    const acknowledged = [req.session.userId];
     let notAcknowledged = [];
     const role = req.session.role;
     if (role !== 'Manager' && role !== 'Admin') {
@@ -29,19 +28,17 @@ exports.createUpdate = (req, res, next) => {
         .populate('users')
         .then(team => {
             const emailList = team.users.map((user) => user.email);
-            console.log(team, emailList);
             sendMailList(emailList, `New Update - ${title}`, '<p>You have a new update ready for review.</p>');
             notAcknowledged = 
                 team.users
-                    .map((user)=> user._id)
-                    .filter(_id => _id !== userId);
-            notAcknowledged = team.users;
+                    .map(user => user._id.toString())
+                    .filter(_id => _id !== req.session.userId.toString());
             const newUpdate = new Update({
                 teamId: teamId,
                 title: title,
                 text: text,
                 acknowledged: acknowledged,
-                notAcknowledged, notAcknowledged,
+                notAcknowledged: notAcknowledged,
                 files: files
             });
             newUpdate.save()
@@ -117,7 +114,7 @@ exports.acknowledgeUpdate = (req, res, next) => {
     update.findById(updateId)
         .then(update => {
             update.acknowledged.push(userId);
-            update.notAcknowledged = update.notAcknowledged.filter(Id => Id !== userId);
+            update.notAcknowledged = update.notAcknowledged.filter(Id => Id.toString() !== userId.toString());
             if (update.notAcknowledged.length === 0) {
                 deleteFiles(update.files);
             };
@@ -139,7 +136,6 @@ exports.acknowledgeUpdate = (req, res, next) => {
 
 exports.deleteUpdate = (req, res, next) => {
     const updateId = req.body.updateId;
-    const teamId = req.session.teamId;
     const role = req.session.role;
     if (role !== 'Manager' && role !== 'Admin') {
         return res.status(403).json({message: 'You are not authorized to delete updates.'})
@@ -149,9 +145,9 @@ exports.deleteUpdate = (req, res, next) => {
             deleteFiles(update.files);
             Update.findByIdAndDelete(updateId)
                 .then(result => {
-                    Team.findById(teamId)
+                    Team.findById(result.teamId)
                     .then(team => {
-                        team.updates = team.updates.filter(Id => Id !== updateId);
+                        team.updates = team.updates.filter(Id => Id.toString() !== updateId.toString());
                         team.save()
                             .then(result => {
                                 res.status(200).json({message: 'Update deleted.'})
@@ -166,7 +162,7 @@ exports.deleteUpdate = (req, res, next) => {
                         next(new Error('Server operation error - Unable to search for team.'))
                     })
                 })
-                .catach(err => {
+                .catch(err => {
                     console.log(err);
                     next(new Error('Server operation error - Unable to delete update.'))
                 })

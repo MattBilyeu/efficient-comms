@@ -25,11 +25,13 @@ export class EscalationsComponent implements OnInit {
     toolbar: "numlist bullist link table"
   };
   fileList: FileList;
+  role: string;
 
   constructor(private dataService: DataService,
               private httpService: HttpService) {}
 
   ngOnInit() {
+    this.role = this.dataService.user.role;
     this.escalations = this.filterEscalations(this.dataService.team.escalations);
   }
 

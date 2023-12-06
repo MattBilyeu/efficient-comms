@@ -13,7 +13,7 @@
             <select name="role" id="role" ngModel required>
                 <option value="Admin">Admin</option>
                 <option value="Manager">Manager</option>
-                <option value="User">User</option>
+                <option value="Member">Member</option>
             </select>
         </div>
         <div class="group">
@@ -25,7 +25,7 @@
         </div>
         <button type="submit">Create User</button>
     </form>
-    <form *ngIf="users.length > 0" #u="ngForm" (ngSubmit)="updateUser(u)">
+    <form *ngIf="users.length !== 0" #u="ngForm" (ngSubmit)="updateUser(u)">
         <select name="userId" id="userId" ngModel required [(ngModel)]="selectedUserId" (ngModelChange)="selectUser()">
             <option *ngFor="let user of users" [value]="user._id">{{ user.name }}</option>
         </select>
@@ -42,7 +42,7 @@
             <select name="role" id="role" ngModel required>
                 <option value="Admin">Admin</option>
                 <option value="Manager">Manager</option>
-                <option value="User">User</option>
+                <option value="Member">Member</option>
             </select>
         </div>
         <div class="group">

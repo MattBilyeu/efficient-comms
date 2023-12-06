@@ -47,7 +47,8 @@ export class UserComponent implements OnInit {
           this.users = this.users.concat(team.users);
         });
         if (this.users) {
-          this.selectedUser = this.users[0]
+          this.selectedUser = this.users[0];
+          this.selectedUserId = this.users[0]._id;
         }
       }
     })

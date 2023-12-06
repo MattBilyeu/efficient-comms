@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../services/data.service';
 import { Router } from '@angular/router';
 import { LoginService } from '../services/login.service';
 
@@ -11,8 +10,7 @@ import { LoginService } from '../services/login.service';
 export class ManagerComponent implements OnInit {
   loggedIn: boolean = false;
 
-  constructor(private dataService: DataService,
-              private router: Router,
+  constructor(private router: Router,
               private loginService: LoginService) {}
 
   ngOnInit() {

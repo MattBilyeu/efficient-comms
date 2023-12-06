@@ -95,6 +95,7 @@ exports.createUser = (req, res, next) => {
 };
 
 exports.updateUser = (req, res, next) => {
+    console.log(req.body);
     const name = req.body.name;
     const email = req.body.email;
     const peerReviewer = req.body.peerReviewer;
@@ -222,14 +223,14 @@ exports.deleteUser = (req, res, next) => {
                     Team.findById(teamId)
                         .then(team => {
                             updateIds = team.updates;
-                            team.users = team.users.filter(Id => Id !== userId);
+                            team.users = team.users.filter(Id => Id.toString() !== userId.toString());
                             team.save()
                                 .then(result => {
                                     Update.find()
                                         .then(updates => {
                                             updates.forEach(update => {
-                                                update.acknowledged = update.acknowledged.filter(id => id !== userId);
-                                                update.notAcknowledged = update.notAcknowledged.filter(id => id !== userId);
+                                                update.acknowledged = update.acknowledged.filter(id => id.toString() !== userId.toString());
+                                                update.notAcknowledged = update.notAcknowledged.filter(id => id.toString() !== userId.toString());
                                                 update.save()
                                             });
                                             return res.status(200).json({message: 'User deleted.'})
@@ -261,11 +262,15 @@ exports.deleteUser = (req, res, next) => {
 
 exports.getUserNames = (req, res, next) => {
     const idArray = req.body.userIds;
+    if (idArray.length === 0) {
+        return res.status(422).json({message: 'Array is empty'})
+    }
     let names = [];
     User.find()
         .then(users => {
             users.forEach(user => {
-                if (user._Id in idArray) {
+                const foundIndex = idArray.find(id => id === user._id.toString());
+                if (foundIndex) {
                     names.push(user.name);
                 }
             });
