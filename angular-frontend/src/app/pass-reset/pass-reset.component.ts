@@ -3,6 +3,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { Router } from '@angular/router';
 import { HttpService } from '../services/http.service';
 import { NgForm } from '@angular/forms';
+import { LoginService } from '../services/login.service';
 
 interface Response {
   message: string
@@ -19,7 +20,8 @@ export class PassResetComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private httpService: HttpService) {}
+              private httpService: HttpService,
+              private loginService: LoginService) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
@@ -36,8 +38,8 @@ export class PassResetComponent implements OnInit {
       this.alert = response.message;
       if (response.message === 'Password udpated.') {
         setTimeout(()=> {
-          this.router.navigate(['/login'])
-        , 2000})
+          this.loginService.loggedIn.next(false)
+        }, 2000)
       }
     })
   }

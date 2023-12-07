@@ -137,6 +137,7 @@ exports.sendReset = (req, res, next) => {
         const token = buffer.toString('hex');
         User.findOne({email: req.body.email})
             .then(user => {
+                console.log(user, req.body);
                 user.resetToken = token;
                 user.tokenExpiration = Date.now() + 3600000;
                 return user.save();

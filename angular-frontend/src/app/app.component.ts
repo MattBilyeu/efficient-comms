@@ -23,7 +23,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.route.url.subscribe(segments => {
-      console.log(segments);
       const hasReset = segments.filter(segment => segment.toString() === 'reset');
       if (hasReset.length === 0) {
         this.router.navigate['/login'];

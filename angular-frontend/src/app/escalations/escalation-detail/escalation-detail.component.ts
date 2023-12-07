@@ -64,7 +64,7 @@ export class EscalationDetailComponent implements OnInit{
   }
 
   deleteEscalation() {
-    const confirmation = prompt('Are you sure you want to resolve this escalation?  It will permanently remove it.');
+    const confirmation = confirm('Are you sure you want to resolve this escalation?  It will permanently remove it.');
     if (confirmation) {
       this.httpService.deleteEscalation(this.eId)
         .subscribe((response: Response) => {

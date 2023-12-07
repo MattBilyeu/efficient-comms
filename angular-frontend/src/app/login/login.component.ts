@@ -36,7 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   sendReset(form: NgForm) {
-    this.httpService.resetRequest(form.value.email)
+    this.httpService.resetRequest({email: form.value.email})
       .subscribe((response: Response) => {
         this.alert = response.message
       })

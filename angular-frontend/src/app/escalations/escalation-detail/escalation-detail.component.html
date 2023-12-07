@@ -3,10 +3,14 @@
         <h3>Review Escalation</h3>
         <form #a="ngForm" (ngSubmit)="advanceEscalation(a)">
             <h3>{{ escalation.title }}</h3>
+            <div class="existingNotes">
+                <h3>Note History</h3>
+                <div class="escalationNotes" [innerHTML]="note" *ngFor="let note of escalation.notes"></div>
+            </div>
             <label for="note">Note: </label>
-            <editor [init]="editorConfig" id="note" name="note" ngModel required></editor>
+            <editor [init]="editorConfig" name="note" ngModel required></editor>
             <label for="files">Files:</label>
-            <input type="file" name="files" id="files" multiple ngModel (change)="chooseFiles($event)">
+            <input type="file" name="files" multiple ngModel (change)="chooseFiles($event)">
             <button type="submit">Advance Escalation</button>
         </form>
         <button type="button" (click)="deleteEscalation()">Resolve Escalation</button>
@@ -14,5 +18,4 @@
     <div class="files">
         <a [href]="file" *ngFor="let file of fileUrls" target="_blank">{{ file }}</a>
     </div>
-    <div class="escalationNotes" [innerHTML]="note" *ngFor="let note of escalation.notes"></div>
 </div>

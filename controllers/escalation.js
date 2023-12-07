@@ -65,7 +65,10 @@ exports.advanceEscalation = (req, res, next) => {
     const escalationId = req.body.escalationId;
     const teamId = req.session.teamId;
     const note = req.body.note;
-    const files = req.files.map(file => '/files/' + file.filename);
+    let files = [];
+    if (req.files) {
+        files = req.files.map(file => '/files/' + file.filename);
+    }
     let team;
     let peerReviewers;
     Team.findById(teamId)
@@ -82,7 +85,7 @@ exports.advanceEscalation = (req, res, next) => {
                         emailList = team.users.filter(user => user.role === 'Manager').map(user => user.email);
                     } else if (escalation.stage === 'Manager') {
                         escalation.stage = 'Member';
-                        emailList = team.users.filter(user => user._id === escalation.ownerId).map(user => user.email);
+                        emailList = team.users.filter(user => user._id.toString() === escalation.ownerId.toString()).map(user => user.email);
                     } else if (escalation.stage === 'Member' && peerReviewers.length === 0) {
                         escalation.stage = 'Manager'
                         emailList = team.users.filter(user => user.role === 'Manager').map(user => user.email);
@@ -114,7 +117,7 @@ exports.deleteEscalation = (req, res, next) => {
         .then(result => {
             Team.findById(req.session.teamId)
                 .then(team => {
-                    team.escalations = team.escalations.filter(e => e._id !== req.session.escalationId);
+                    team.escalations = team.escalations.filter(e => e._id.toString() !== req.body.escalationId.toString());
                     team.save()
                         .then(result => res.status(200).json({message: 'Escalation removed.'}))
                         .catch(err => {

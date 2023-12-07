@@ -68,16 +68,20 @@ exports.createUpdate = (req, res, next) => {
 exports.updateUpdate = (req, res, next) => {
     const userId = req.session.userId;
     const updateId = req.body.updateId;
-    const title = req.body.title;
     const text = req.body.text;
     const teamId = req.session.teamId;
-    const files = req.files.map((file) => '/files/' + file.filename);
+    console.log(req);
+    let files = [];
+    if (req.files) {
+        files = req.files.map((file) => '/files/' + file.filename);
+    }
     let changedUpdate;
     let emailList
     Update.findById(updateId)
         .then(update=> {
-            update.title = title;
-            update.text = text;
+            if (text) {
+                update.text = text;
+            };
             if (files.length !== 0) {
                 deleteFiles(update.files);
                 update.files = files;
@@ -89,7 +93,7 @@ exports.updateUpdate = (req, res, next) => {
                 changedUpdate.notAcknowledged = team.users.map((userObj) => userObj._id).filter((_id => _id !== userId));
                 changedUpdate.save()
                     .then(result => {
-                        sendMailList(emailList, `Update Changed - ${title}`, '<p>An update has been deleted, please review again.</p>');
+                        sendMailList(emailList, `Update Changed - ${result.title}`, '<p>An update has been deleted, please review again.</p>');
                         res.status(201).json({message: 'Update changed successfully.'})
                     })
                     .catch(err => {
