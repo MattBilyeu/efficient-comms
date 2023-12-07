@@ -6,7 +6,7 @@ import { User } from '../models/user.model';
 interface advanceEscalationObject {
   escalationId: string,
   note: string,
-  files?: FileList | string[]
+  files: FileList
 }
 
 @Injectable({
@@ -41,12 +41,28 @@ export class HttpService {
   }
 
   // Escalation related
-  createEscalation(e: Escalation) {
-    return this.http.post('/escalation/createEscalation', e)
+  createEscalation(title: string, note: string, files: FileList, teamId: string, ownerId: string, ownerName: string, stage: string) {
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i], files[i].name);
+    };
+    formData.append('title', title);
+    formData.append('notes', note);
+    formData.append('teamId', teamId);
+    formData.append('ownerId', ownerId);
+    formData.append('ownerName', ownerName);
+    formData.append('stage', stage)
+    return this.http.post('/escalation/createEscalation', formData)
   }
 
   advanceEscalationo(advanceObject: advanceEscalationObject) {
-    return this.http.post('/escalation/advanceEscalation', advanceObject)
+    const formData = new FormData();
+    for (let i = 0; i < advanceObject.files.length; i++) {
+      formData.append('files', advanceObject.files[i], advanceObject.files[i].name);
+    };
+    formData.append('note', advanceObject.note);
+    formData.append('escalationId', advanceObject.escalationId);
+    return this.http.post('/escalation/advanceEscalation', formData);
   }
 
   deleteEscalation(id: string) {
@@ -76,11 +92,24 @@ export class HttpService {
 
   // Update related
   createUpdate(files: FileList, title: string, text: string) {
-    return this.http.post('/update/createUpdate', {files: files, title: title, text: text})
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i], files[i].name);
+    };
+    formData.append('title', title);
+    formData.append('text', text);
+    return this.http.post('/update/createUpdate', formData);
   }
 
   updateUpdate(id: string, files: FileList, title: string, text: string) {
-    return this.http.post('/update/updateUpdate', {updateId: id, files: files, title: title, text: text})
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('files', files[i], files[i].name);
+    }
+    formData.append('updateId', id);
+    formData.append('title', title);
+    formData.append('text', text);
+    return this.http.post('/update/updateUpdate', formData)
   }
 
   acknowledgeUpdate(id: string) {

@@ -6,7 +6,7 @@ const deleteFiles = require('../util/files').deleteFiles;
 
 exports.createEscalation = (req, res, next) => {
     const title = req.body.title;
-    const notes = req.body.notes;
+    const notes = [req.body.notes];
     let files = [];
     if (req.files) {
         files = req.files.map((file) => '/files/' + file.filename);

@@ -70,7 +70,6 @@ exports.updateUpdate = (req, res, next) => {
     const updateId = req.body.updateId;
     const text = req.body.text;
     const teamId = req.session.teamId;
-    console.log(req);
     let files = [];
     if (req.files) {
         files = req.files.map((file) => '/files/' + file.filename);

@@ -66,15 +66,7 @@ export class EscalationsComponent implements OnInit {
   }
 
   createEscalation(form: NgForm) {
-    const newEscalation = new Escalation(
-      form.value.title,
-      [form.value.note],
-      this.fileList,
-      this.dataService.user.teamId,
-      this.dataService.user._id,
-      this.dataService.user.name,
-      ''
-    );
+    let stage;
     let peerReviewerFound = false;;
     for (let i = 0; i < this.dataService.team.users.length; i++) {
       if (this.dataService.team.users[i].peerReviewer) {
@@ -82,13 +74,21 @@ export class EscalationsComponent implements OnInit {
       }
     };
     if (peerReviewerFound) {
-      newEscalation.stage = 'Peer Review'
+      stage = 'Peer Review'
     } else {
-      newEscalation.stage = 'Manager'
+      stage = 'Manager'
     }
-    this.httpService.createEscalation(newEscalation)
-      .subscribe((response: Response) => {
-        this.alert = response.message;
-      })
+    this.httpService.createEscalation(
+      form.value.title, 
+      form.value.note, 
+      this.fileList, 
+      this.dataService.user.teamId,
+      this.dataService.user._id,
+      this.dataService.user.name,
+      stage
+      )
+        .subscribe((response: Response) => {
+          this.alert = response.message;
+        })
   }
 }
