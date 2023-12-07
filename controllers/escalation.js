@@ -1,26 +1,30 @@
 const Escalation = require('../models/escalation');
 const Team = require('../models/team');
 
-const send = require('../util/emailer').sendEmail;
+const { send } = require('../util/emailer');
 const deleteFiles = require('../util/files').deleteFiles;
 
 exports.createEscalation = (req, res, next) => {
     const title = req.body.title;
     const notes = req.body.notes;
-    const files = req.files.map((file) => '/files/' + file.filename);
+    let files = [];
+    if (req.files) {
+        files = req.files.map((file) => '/files/' + file.filename);
+    }
     const teamId = req.session.teamId;
     const ownerId = req.session.userId;
     const ownerName = req.session.name;
     let stage;
-    let peerReviewers;
+    let reviewers;
     let foundTeam;
     Team.findById(teamId)
         .populate('users')
         .then(team => {
             foundTeam = team;
-            peerReviewers = team.users.filter(user => user.peerReviewer === true);
-            if (peerReviewers.length === 0) {
-                stage = 'Manager'
+            reviewers = team.users.filter(user => user.peerReviewer === true && user._id.toString() !== ownerId.toString()).map(user => user.email);
+            if (reviewers.length === 0) {
+                stage = 'Manager';
+                reviewers = team.users.filter(user => user.role === 'Manager').map(user => user.email);
             } else {
                 stage = 'Peer Review'
             };
@@ -35,10 +39,10 @@ exports.createEscalation = (req, res, next) => {
             });
             newEscalation.save()
                 .then(e => {
-                    foundTeam.escalations.push(e._Id);
+                    foundTeam.escalations.push(e._id);
                     foundTeam.save()
                         .then(result => {
-                            send(peerReviewers, 'New Escalation for Review', '<p>There is a new escalation ready for review.</p>');
+                            send(reviewers, 'New Escalation for Review', '<p>There is a new escalation ready for review.</p>');
                             res.status(201).json({message: 'Escalation created.'})
                         })
                         .catch(err => {
@@ -70,7 +74,7 @@ exports.advanceEscalation = (req, res, next) => {
             team = foundTeam;
             peerReviewers = foundTeam.users.filter(user => user.peerReviewer === true);
             Escalation.findById(escalationId)
-                .populate(teamId)
+                .populate('teamId')
                 .then(escalation => {
                     let emailList;
                     if (escalation.stage === 'Peer Review') {
@@ -78,7 +82,7 @@ exports.advanceEscalation = (req, res, next) => {
                         emailList = team.users.filter(user => user.role === 'Manager').map(user => user.email);
                     } else if (escalation.stage === 'Manager') {
                         escalation.stage = 'Member';
-                        emailList = team.users.filter(user => user._Id === escalation.ownerId).map(user => user.email);
+                        emailList = team.users.filter(user => user._id === escalation.ownerId).map(user => user.email);
                     } else if (escalation.stage === 'Member' && peerReviewers.length === 0) {
                         escalation.stage = 'Manager'
                         emailList = team.users.filter(user => user.role === 'Manager').map(user => user.email);
@@ -90,6 +94,7 @@ exports.advanceEscalation = (req, res, next) => {
                         deleteFiles(escalation.files);
                         escalation.files = files;
                     };
+                    console.log(emailList);
                     escalation.notes.push(note);
                     escalation.save()
                         .then(result => {
@@ -109,7 +114,7 @@ exports.deleteEscalation = (req, res, next) => {
         .then(result => {
             Team.findById(req.session.teamId)
                 .then(team => {
-                    team.escalations = team.escalations.filter(e => e._Id !== req.session.escalationId);
+                    team.escalations = team.escalations.filter(e => e._id !== req.session.escalationId);
                     team.save()
                         .then(result => res.status(200).json({message: 'Escalation removed.'}))
                         .catch(err => {

@@ -84,6 +84,7 @@ export class UserComponent implements OnInit {
   }
 
   updateUser(form: NgForm) {
+    console.log(form.value);
     const name = form.value.name;
     const email = form.value.email;
     const peerReviewer = form.value.peerReviewer;

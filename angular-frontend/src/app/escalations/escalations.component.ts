@@ -48,7 +48,7 @@ export class EscalationsComponent implements OnInit {
   };
 
   filterEscalations(arr: Array<Escalation>) {
-    let filteredEscalations: Escalation[];
+    let filteredEscalations: Escalation[] = [];
     arr.forEach(e => {
       if (
         e.stage === 'Member' && e.ownerId === this.dataService.user._id ||
