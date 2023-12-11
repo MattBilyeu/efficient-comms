@@ -55,7 +55,7 @@ export class HttpService {
     return this.http.post('/escalation/createEscalation', formData)
   }
 
-  advanceEscalationo(advanceObject: advanceEscalationObject) {
+  advanceEscalation(advanceObject: advanceEscalationObject) {
     const formData = new FormData();
     for (let i = 0; i < advanceObject.files.length; i++) {
       formData.append('files', advanceObject.files[i], advanceObject.files[i].name);
@@ -139,6 +139,4 @@ export class HttpService {
   deleteUser(id: string) {
     return this.http.post('/user/deleteUser', {userId: id})
   }
-
-  // --> Leaving off findUserById - may not be necessary
 }

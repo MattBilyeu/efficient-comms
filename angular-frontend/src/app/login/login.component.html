@@ -11,7 +11,7 @@
         </div>
         <div class="group">
             <button type="submit">Login</button>
-            <button type="button" class="link" (click)="switchReset()">Reset Password</button>
+            <button type="button" (click)="switchReset()">Reset Password</button>
         </div>
     </form>
     <form (ngSubmit)="sendReset(r)" #r="ngForm" *ngIf="resetRequest">

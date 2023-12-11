@@ -4,6 +4,7 @@ body {
     margin: 0;
     box-sizing: border-box;
     font-family: sans-serif;
+    background-color: var(--primary-color);
 }
 
 :root {
@@ -18,15 +19,48 @@ body {
     border-top: thin solid darkgrey;
     border-bottom: thin solid darkgrey;
     padding: 2rem;
+    text-align: center
 }
 
 .group {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: 1rem;
     margin: 1rem auto;
+    padding: auto 1rem;
 }
 
 form {
     justify-content: center;
+    background-color: white;
+    padding: 1rem;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 30px;
+    box-shadow: 4px 4px 0px black;
+    max-width: 350px;
+    margin: 0 auto;
+};
+
+button {
+    padding: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    border: none;
+    box-shadow: 2px 2px 2px black;
+    cursor: pointer
+}
+
+button:hover {
+    animation: 1s buttonHover ease-in-out forwards
+}
+
+@keyframes buttonHover {
+    0% {
+        box-shadow: 2px 2px 2px black
+    }
+    100% {
+        box-shadow: none
+    }
 }

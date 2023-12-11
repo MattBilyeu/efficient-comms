@@ -57,7 +57,7 @@ export class EscalationDetailComponent implements OnInit{
       note: form.value.note,
       files: this.fileList
     }
-    this.httpService.advanceEscalationo(advanceEscalationObject)
+    this.httpService.advanceEscalation(advanceEscalationObject)
       .subscribe((response: Response) => {
         this.alert = response.message;
       })
