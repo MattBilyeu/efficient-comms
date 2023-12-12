@@ -48,8 +48,10 @@
         <button type="submit">Update User</button>
     </form>
     <div *ngIf="!deleteActive">
-        <h1>Need to delete a user?</h1>
-        <button (click)="activateDelete()">Activate Delete Form</button>
+        <div class="form-appearance">
+            <h1>Need to delete a user?</h1>
+            <button (click)="activateDelete()">Activate Delete Form</button>
+        </div>
     </div>
     <form *ngIf="deleteActive" (ngSubmit)="deleteUser(d)" #d="ngForm">
         <div class="group">

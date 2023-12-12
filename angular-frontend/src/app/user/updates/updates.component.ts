@@ -17,19 +17,28 @@ export class UpdatesComponent implements OnInit {
   alert: string;
   updates: Update[];
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService,
+              private httpService: HttpService) {}
 
   ngOnInit() {
-    this.updateComponent();
-  };
-
-  updateComponent() {
     this.updates = this.dataService.team.updates.filter(update => {
       const foundIndex = update.notAcknowledged.findIndex((Id)=> {
         return this.dataService.user._id === Id
       });
       return foundIndex !== -1
     })
-  }
+  };
 
+  updateComponent() {
+    this.httpService.getPopulatedTeam(this.dataService.user.teamId)
+      .subscribe((team: Team) => {
+        this.dataService.team = team;
+        this.updates = this.dataService.team.updates.filter(update => {
+          const foundIndex = update.notAcknowledged.findIndex((Id)=> {
+            return this.dataService.user._id === Id
+          });
+          return foundIndex !== -1
+        })
+      })
+  }
 }

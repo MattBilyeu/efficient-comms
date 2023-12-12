@@ -1,6 +1,6 @@
 <div class="container">
-    <h3 *ngIf="role === 'Member'">Create Escalation</h3>
     <form #c="ngForm" (ngSubmit)="createEscalation(c)" *ngIf="role === 'Member'">
+        <h3 *ngIf="role === 'Member'">Create Escalation</h3>
         <div class="group">
             <label for="title">Title: </label>
             <input type="text" name="title" ngModel required>

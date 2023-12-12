@@ -3,7 +3,7 @@
         <div class="inputsContainer">
             <form #a="ngForm" (ngSubmit)="updateUpdate(a)">
                 <h3>{{ update.title }}</h3>
-                <label for="text">Text: </label>
+                <!-- <label for="text">Text: </label> -->
                 <div [innerHTML]="update.text"></div>
                 <div class="textEditor" *ngIf="editText">
                     <editor [init]="editorConfig" name="text" ngModel required></editor>
@@ -13,21 +13,21 @@
                 <label for="files">Files:</label>
                 <input type="file" name="files" multiple ngModel (change)="chooseFiles($event)">
                 <button type="submit">Update</button>
+                <button type="button" (click)="deleteUpdate()">Delete Update</button>
+                <div class="files">
+                    <a [href]="file" *ngFor="let file of fileUrls" target="_blank">{{ file }}</a>
+                </div>
+                <div class="acknowledgements">
+                    <h3>Acknowledged By:</h3>
+                    <ul>
+                        <li *ngFor="let name of update.acknowledged">{{ name }}</li>
+                    </ul>
+                    <h3>Not Acknowledged By:</h3>
+                    <ul>
+                        <li *ngFor="let name of update.notAcknowledged">{{ name }}</li>
+                    </ul>
+                </div>
             </form>
-            <button type="button" (click)="deleteUpdate()">Delete Update</button>
-        </div>
-        <div class="files">
-            <a [href]="file" *ngFor="let file of fileUrls" target="_blank">{{ file }}</a>
-        </div>
-        <div class="acknowledgements">
-            <h3>Acknowledged By:</h3>
-            <ul>
-                <li *ngFor="let name of update.acknowledged">{{ name }}</li>
-            </ul>
-            <h3>Not Acknowledged By:</h3>
-            <ul>
-                <li *ngFor="let name of update.notAcknowledged">{{ name }}</li>
-            </ul>
         </div>
     </div>
 </div>

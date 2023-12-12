@@ -114,7 +114,7 @@ exports.updateUpdate = (req, res, next) => {
 exports.acknowledgeUpdate = (req, res, next) => {
     const userId = req.session.userId;
     const updateId = req.body.updateId;
-    update.findById(updateId)
+    Update.findById(updateId)
         .then(update => {
             update.acknowledged.push(userId);
             update.notAcknowledged = update.notAcknowledged.filter(Id => Id.toString() !== userId.toString());

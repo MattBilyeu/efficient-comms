@@ -30,7 +30,8 @@ body {
     padding: auto 1rem;
 }
 
-form {
+form,
+.form-appearance {
     justify-content: center;
     background-color: white;
     padding: 1rem;
@@ -39,7 +40,10 @@ form {
     border-radius: 30px;
     box-shadow: 4px 4px 0px black;
     max-width: 350px;
-    margin: 0 auto;
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 };
 
 button {
@@ -49,7 +53,8 @@ button {
     font-weight: bold;
     border: none;
     box-shadow: 2px 2px 2px black;
-    cursor: pointer
+    cursor: pointer;
+    max-width: 350px
 }
 
 button:hover {
