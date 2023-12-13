@@ -9,6 +9,8 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const mongoURI = require('./util/protected').mongoURI;
 const secret = require('./util/protected').secret;
 const bcrypt = require('bcrypt');
+const helmet = require('helmet');
+const compression = require('compression');
 
 const User = require('./models/user');
 
@@ -34,6 +36,9 @@ const fileStorage = multer.diskStorage({
         cb(null, timestamp + '-' + file.originalname)
     }
 });
+
+app.use(helmet());
+app.use(compression());
 
 app.use(bodyParser.json());
 app.use(multer({storage: fileStorage}).array('files'));
