@@ -8,28 +8,8 @@ header {
     font-weight: bold
 }
 
-header ul {
-    display: flex;
-    justify-content: space-around;
-    margin: auto auto;
-    width: 100%;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-header li {
-    list-style: none;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 1rem;
-    padding-left: 1rem;
-    cursor: pointer;
-    background-color: var(--primary-color);
-    height: fit-content;
-    border-radius: 30px;
-    box-shadow: 2px 2px 0 black;
-    color: white
+header .desktopNav {
+    display: none;
 }
 
 header .icon {
@@ -40,4 +20,54 @@ header .icon {
 
 header .icon img {
     width: 100px;
+}
+.hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.hamburger div {
+    height: 3px;
+    background-color: black;
+    width: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media screen and (min-width: 800px) {
+    .hamburger {
+        display: none
+    }
+
+    header .desktopNav {
+        display: block
+    }
+
+    header ul.desktopNav {
+        display: flex;
+        justify-content: space-around;
+        margin: auto auto;
+        width: 100%;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    header ul.desktopNav li {
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 1rem;
+        padding-left: 1rem;
+        cursor: pointer;
+        background-color: var(--primary-color);
+        height: fit-content;
+        border-radius: 30px;
+        box-shadow: 2px 2px 0 black;
+        color: white
+    }
 }

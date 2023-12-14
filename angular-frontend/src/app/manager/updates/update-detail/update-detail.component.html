@@ -10,12 +10,16 @@
                     <button (click)="toggleEditText()" type="button">Collapse Text Editor</button>
                 </div>
                 <button *ngIf="!editText" (click)="toggleEditText()" type="button">Open Text Editor</button>
-                <label for="files">Files:</label>
+                <label for="files">Replace Attachments:</label>
                 <input type="file" name="files" multiple ngModel (change)="chooseFiles($event)">
                 <button type="submit">Update</button>
                 <button type="button" (click)="deleteUpdate()">Delete Update</button>
-                <div class="files">
-                    <a [href]="file" *ngFor="let file of fileUrls" target="_blank">{{ file }}</a>
+                <div class="currentFiles">
+                    <h3>Current Attachments:</h3>
+                    <ul>
+                        <li *ngFor="let file of fileUrls"><a [href]="file" target="_blank">{{ file }}</a></li>
+                    </ul>
+                   
                 </div>
                 <div class="acknowledgements">
                     <h3>Acknowledged By:</h3>

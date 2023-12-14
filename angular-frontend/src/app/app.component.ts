@@ -15,6 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   tabSelected: string;
   role: string;
+  mobileNavigation: boolean = false;
 
   constructor(private router: Router,
               private loginService: LoginService,
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
             this.router.navigate(['']);
           } else {
             this.tabSelected = 'dash';
+            this.role = this.dataService.user.role;
             this.routeUser(this.dataService.user.role);
           }
         });
@@ -55,17 +57,24 @@ export class AppComponent implements OnInit, OnDestroy {
   logOut() {
     this.tabSelected = 'login';
     this.loginService.logout();
-    this.router.navigate['/login']
+    this.mobileNavigation = false;
+    this.router.navigate([''])
   }
 
   selectDash() {
     this.tabSelected = 'dash';
+    this.mobileNavigation = false;
     this.routeUser(this.dataService.user.role);
   }
 
   selectUpdates() {
     this.tabSelected = 'updates';
-    this.router.navigate['/all-updates']
+    this.mobileNavigation = false;
+    this.router.navigate(['/all-updates'])
+  }
+
+  mobileNav() {
+    this.mobileNavigation = true;
   }
 
   ngOnDestroy() {
