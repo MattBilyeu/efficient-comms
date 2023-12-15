@@ -6,7 +6,7 @@
         <li (click)="logOut()" *ngIf="!loggedIn">Login</li>
         <li (click)="logOut()" *ngIf="loggedIn">Logout</li>
     </ul>
-    <div class="hamburger">
+    <div class="hamburger" (click)="mobileNav()">
         <div></div>
         <div></div>
         <div></div>
