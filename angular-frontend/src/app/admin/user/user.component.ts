@@ -16,7 +16,6 @@ interface Response {
 })
 export class UserComponent implements OnInit {
   deleteActive: boolean = false;
-  alert: string;
   users: User[] = [];
   teams: Team[];
   selectedUser: User;
@@ -38,7 +37,7 @@ export class UserComponent implements OnInit {
   updateComponent() {
     this.httpService.getAllTeams().subscribe((response: Response | Team[]) => {
       if ('message' in response) {
-        this.alert = response.message
+        this.dataService.message.next(response.message)
       } else {
         this.dataService.adminTeamOb = response;
         this.teams = this.dataService.adminTeamOb;
@@ -60,7 +59,7 @@ export class UserComponent implements OnInit {
 
   createUser(form: NgForm) {
     if (form.value.role === 'Admin' && form.value.teamId !== 'Admin') {
-      this.alert = 'Admins must be assigned to the Admin team';
+      this.dataService.message.next('Admins must be assigned to the Admin team');
     } else {
       const newUser = new User(
         form.value.name,
@@ -71,7 +70,7 @@ export class UserComponent implements OnInit {
         );
       this.httpService.createUser(newUser)
         .subscribe((response: Response) => {
-          this.alert = response.message;
+          this.dataService.message.next(response.message);
           if (response.message === 'User created.') {
             this.updateComponent();
           }
@@ -92,7 +91,7 @@ export class UserComponent implements OnInit {
     const userId = form.value.userId;
     this.httpService.updateUser(userId, name, email, peerReviewer, role)
       .subscribe((response: Response) => {
-        this.alert = response.message
+        this.dataService.message.next(response.message);
         if (response.message === 'User updated.') {
           this.updateComponent();
         }
@@ -103,7 +102,7 @@ export class UserComponent implements OnInit {
     const confirmation = confirm('Are you sure you want to delete this user?  This is a destructive and irreversable action.');
     if (confirmation) {
       this.httpService.deleteUser(form.value.userId).subscribe((response: Response) => {
-        this.alert = response.message;
+        this.dataService.message.next(response.message);
         if (response.message === 'User deleted.') {
           this.updateComponent();
         }

@@ -1,7 +1,7 @@
-<div class="alert" *ngIf="alert">
-    <h1>{{ alert }}</h1>
+<div class="alert" *ngIf="loading">
+    <h1>{{ loading }}</h1>
 </div>
-<div *ngIf="!alert">
+<div *ngIf="!loading">
     <app-team></app-team>
     <app-user></app-user>
 </div>

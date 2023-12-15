@@ -52,7 +52,7 @@ export class UserComponent implements OnInit {
         );
       this.httpService.createUser(newUser)
         .subscribe((response: Response) => {
-          this.alert = response.message;
+          this.dataService.message.next(response.message);
           if (response.message === 'User created.') {
             this.updateComponent();
           }
@@ -72,7 +72,7 @@ export class UserComponent implements OnInit {
     const userId = form.value.userId;
     this.httpService.updateUser(userId, name, email, peerReviewer, role)
       .subscribe((response: Response) => {
-        this.alert = response.message
+        this.dataService.message.next(response.message);
         if (response.message === 'User updated.') {
           this.updateComponent();
         }
@@ -83,7 +83,7 @@ export class UserComponent implements OnInit {
     const confirmation = confirm('Are you sure you want to delete this user?  This is a destructive and irreversable action.');
     if (confirmation) {
       this.httpService.deleteUser(form.value.userId).subscribe((response: Response) => {
-        this.alert = response.message;
+        this.dataService.message.next(response.message);
         if (response.message === 'User deleted.') {
           this.updateComponent();
         }

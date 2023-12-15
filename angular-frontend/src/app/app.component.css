@@ -39,6 +39,12 @@ header ul li,
     width: fit-content
 }
 
+header .icon {
+    position: absolute;
+    top: 0;
+    left: 0
+}
+
 header .icon img {
     width: 100px;
 }
@@ -70,6 +76,17 @@ header .icon img {
     justify-content: center;
     background-color: white;
     z-index: 1;
+}
+
+.alert {
+    width: 150px;
+    background-color: lightgreen;
+    position: fixed;
+    top: 2rem;
+    left: calc(50% - 75px);
+    text-align: center;
+    color: darkgreen;
+    opacity: 0.8
 }
 
 .hidden {

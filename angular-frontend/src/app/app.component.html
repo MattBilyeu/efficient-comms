@@ -20,4 +20,7 @@
         <li (click)="logOut()" *ngIf="loggedIn">Logout</li>
     </ul>
 </div>
+<div class="alert" *ngIf="alertMessage">
+    <h3>{{ alertMessage }}</h3>
+</div>
 <router-outlet></router-outlet>

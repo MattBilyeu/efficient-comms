@@ -78,7 +78,7 @@ export class UpdateDetailComponent implements OnInit {
       form.value.title,
       form.value.text
     ).subscribe((response: Response) => {
-      this.alert = response.message;
+      this.dataService.message.next(response.message);
       if (response.message === 'Update updated.') {
         this.updated.emit(true);
         this.initializeComponent();
@@ -89,7 +89,7 @@ export class UpdateDetailComponent implements OnInit {
   deleteUpdate() {
     this.httpService.deleteUpdate(this.uId)
       .subscribe((response: Response) => {
-        this.alert = response.message;
+        this.dataService.message.next(response.message);
         if (response.message === 'Update deleted.') {
           this.updated.emit(true);
         }

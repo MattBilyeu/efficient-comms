@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { LoginService } from '../services/login.service';
 import { Subscription } from 'rxjs'
 import { HttpService } from '../services/http.service';
+import { DataService } from '../services/data.service';
 
 interface Response {
   message: string
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   resetRequest: boolean = false;
 
   constructor(private loginService: LoginService,
-              private httpService: HttpService) {}
+              private httpService: HttpService,
+              private dataService: DataService) {}
 
   ngOnInit() {
     this.subscription = this.loginService.error.subscribe((error) => {
@@ -38,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   sendReset(form: NgForm) {
     this.httpService.resetRequest({email: form.value.email})
       .subscribe((response: Response) => {
-        this.alert = response.message
+        this.dataService.message.next(response.message)
       })
   }
 

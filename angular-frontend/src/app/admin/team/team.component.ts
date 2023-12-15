@@ -15,7 +15,6 @@ interface Response {
   styleUrls: ['./team.component.css']
 })
 export class TeamComponent implements OnInit {
-  alert: string;
   users: User[] = [];
   teams: Team[];
   deleteActive: boolean = false;
@@ -33,10 +32,9 @@ export class TeamComponent implements OnInit {
   updateComponent() {
     this.httpService.getAllTeams().subscribe((response: Team[] | Response) => {
       if ('message' in response) {
-        this.alert = response.message;
+        this.dataService.message.next(response.message)
       } else {
         this.dataService.adminTeamOb = response;
-        this.alert = undefined;
       };
       this.teams = this.dataService.adminTeamOb;
       this.users = [];
@@ -50,14 +48,14 @@ export class TeamComponent implements OnInit {
     this.httpService.createTeam(form.value.name)
       .subscribe((result: Response) => {
         this.updateComponent();
-        this.alert = result.message;
+        this.dataService.message.next(result.message)
       })
   }
 
   updateTeamName(form: NgForm) {
     this.httpService.updateTeamName(form.value.newName, form.value.teamId)
       .subscribe((result: Response) => {
-        this.alert = result.message;
+        this.dataService.message.next(result.message);
         if (result.message !== 'Team name updates.') {
           this.updateComponent();
         }
@@ -71,7 +69,7 @@ export class TeamComponent implements OnInit {
     this.httpService.reassignMembers(targetTeamId, oldTeamId, userId)
       .subscribe((result: Response) => {
         this.updateComponent();
-        this.alert = result.message;
+        this.dataService.message.next(result.message);
       })
   }
 
@@ -85,7 +83,7 @@ export class TeamComponent implements OnInit {
       this.httpService.deleteTeam(form.value.teamId)
         .subscribe((result: Response) => {
           this.updateComponent();
-          this.alert = result.message;
+          this.dataService.message.next(result.message);
         })
     }
   }

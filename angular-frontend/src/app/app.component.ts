@@ -16,6 +16,8 @@ export class AppComponent implements OnInit, OnDestroy {
   tabSelected: string;
   role: string;
   mobileNavigation: boolean = false;
+  alertMessage: string;
+  alertSubscription: Subscription;
 
   constructor(private router: Router,
               private loginService: LoginService,
@@ -23,6 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute) {}
 
   ngOnInit() {
+    this.alertSubscription = this.dataService.message.subscribe(message => this.handleAlertMessage(message));
     this.route.url.subscribe(segments => {
       const hasReset = segments.filter(segment => segment.toString() === 'reset');
       if (hasReset.length === 0) {
@@ -39,7 +42,14 @@ export class AppComponent implements OnInit, OnDestroy {
         });
         this.loginService.autoLogin();
       }
-    })
+    });
+  }
+
+  handleAlertMessage(mess: string) {
+    this.alertMessage = mess;
+    setTimeout(()=> {
+      this.alertMessage = undefined;
+    }, 4000)
   }
 
   routeUser(role: string) {
@@ -79,5 +89,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.alertSubscription.unsubscribe();
   }
 }

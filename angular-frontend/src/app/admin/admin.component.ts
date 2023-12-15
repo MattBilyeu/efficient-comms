@@ -13,7 +13,7 @@ interface ErrorResponse {
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent implements OnInit {
-  alert: string = 'Loading';
+  loading: string = 'Loading';
 
   constructor(private dataService: DataService,
               private httpService: HttpService) {}
@@ -21,10 +21,10 @@ export class AdminComponent implements OnInit {
   ngOnInit() {
     this.httpService.getAllTeams().subscribe((response: Team[] | ErrorResponse) => {
       if ('message' in response) {
-        this.alert = response.message;
+        this.dataService.message.next(response.message);
       } else {
         this.dataService.adminTeamOb = response;
-        this.alert = undefined;
+        this.loading = undefined;
       }
     })
   }

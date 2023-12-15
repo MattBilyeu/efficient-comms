@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HttpService } from '../services/http.service';
 import { NgForm } from '@angular/forms';
 import { LoginService } from '../services/login.service';
+import { DataService } from '../services/data.service';
 
 interface Response {
   message: string
@@ -19,9 +20,9 @@ export class PassResetComponent implements OnInit {
   token: string;
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
               private httpService: HttpService,
-              private loginService: LoginService) {}
+              private loginService: LoginService,
+              private dataService: DataService) {}
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
@@ -35,7 +36,7 @@ export class PassResetComponent implements OnInit {
     };
     const resetData = {token: this.token, password: form.value.password};
     this.httpService.resetPassword(resetData).subscribe((response: Response)=> {
-      this.alert = response.message;
+      this.dataService.message.next(response.message);
       if (response.message === 'Password udpated.') {
         setTimeout(()=> {
           this.loginService.loggedIn.next(false)

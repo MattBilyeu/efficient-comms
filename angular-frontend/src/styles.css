@@ -29,6 +29,7 @@ body {
     gap: 1rem;
     margin: 1rem auto;
     padding: auto 1rem;
+    width: 100%
 }
 
 form,

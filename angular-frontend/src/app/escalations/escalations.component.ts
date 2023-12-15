@@ -39,7 +39,7 @@ export class EscalationsComponent implements OnInit {
     this.httpService.getPopulatedTeam(this.dataService.user.teamId)
       .subscribe((response: Team | Response) => {
         if ('message' in response) {
-          this.alert = response.message;
+          this.dataService.message.next(response.message);
         } else {
           this.dataService.team = response;
           this.escalations = this.filterEscalations(response.escalations);
@@ -88,7 +88,7 @@ export class EscalationsComponent implements OnInit {
       stage
       )
         .subscribe((response: Response) => {
-          this.alert = response.message;
+          this.dataService.message.next(response.message);
         })
   }
 }

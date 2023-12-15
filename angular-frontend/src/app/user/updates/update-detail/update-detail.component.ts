@@ -37,7 +37,7 @@ export class UpdateDetailComponent implements OnInit {
   acknowledgeUpdate() {
     this.httpService.acknowledgeUpdate(this.updateId)
       .subscribe((result: Response) => {
-        this.alert = result.message;
+        this.dataService.message.next(result.message);
         if (result.message === 'Update acknowledged.') {
           this.httpService.getPopulatedTeam(this.dataService.user.teamId)
             .subscribe((result: Team) => {
