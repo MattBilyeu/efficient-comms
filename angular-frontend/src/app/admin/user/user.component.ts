@@ -40,7 +40,7 @@ export class UserComponent implements OnInit {
         this.dataService.message.next(response.message)
       } else {
         this.dataService.adminTeamOb = response;
-        this.teams = this.dataService.adminTeamOb;
+        this.teams = response;
         this.users = [];
         this.dataService.adminTeamOb.forEach(team => {
           this.users = this.users.concat(team.users);
@@ -72,6 +72,7 @@ export class UserComponent implements OnInit {
         .subscribe((response: Response) => {
           this.dataService.message.next(response.message);
           if (response.message === 'User created.') {
+            form.reset();
             this.updateComponent();
           }
         })
@@ -93,6 +94,7 @@ export class UserComponent implements OnInit {
       .subscribe((response: Response) => {
         this.dataService.message.next(response.message);
         if (response.message === 'User updated.') {
+          form.reset();
           this.updateComponent();
         }
       })

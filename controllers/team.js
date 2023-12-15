@@ -151,7 +151,7 @@ exports.getPopulatedTeam = (req, res, next) => {
     Team.findById(req.body.teamId)
         .populate('users')
         .populate('escalations')
-        .populate('users')
+        .populate('updates')
         .then(team => {
             team.users = team.users.map(user => user.password = 'redacted');
             res.status(200).json(team);

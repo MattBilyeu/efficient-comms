@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Team } from 'src/app/models/team.model';
 import { Update } from 'src/app/models/update.model';
@@ -17,7 +17,7 @@ interface Response {
 export class UpdateDetailComponent implements OnInit {
   alert: string;
   @Input('updateId') updateId: string;
-  acknowledged: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() acknowledged: EventEmitter<boolean> = new EventEmitter<boolean>();
   update: Update;
   fileUrls: string[];
   sanitizedText: SafeHtml;

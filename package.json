@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "This project is created to resolve a communications issue at my workplace and allow for the efficient management of escalations and process updates.",
   "main": "index.js",
+  "engines": {
+    "node": "21.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon app.js"

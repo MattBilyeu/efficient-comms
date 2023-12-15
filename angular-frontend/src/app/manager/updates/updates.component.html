@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="!loading">
     <form #f="ngForm" (ngSubmit)="createUpdate(f)">
         <h3>Create Update</h3>
         <div class="group">
@@ -11,4 +11,6 @@
         <button type="submit">Create Update</button>
     </form>
 </div>
-<app-update-detail (updated)="updateComponent()" *ngFor="let u of updates" [uId]="u._id"></app-update-detail>
+<div class="container" *ngIf="!loading && this.updates.length !== 0">
+    <app-update-detail (updated)="updateComponent()" *ngFor="let u of updates" [uId]="u._id"></app-update-detail>
+</div>

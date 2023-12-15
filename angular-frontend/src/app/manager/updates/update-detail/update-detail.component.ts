@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Update } from 'src/app/models/update.model';
@@ -15,8 +15,7 @@ interface Response {
   styleUrls: ['./update-detail.component.css']
 })
 export class UpdateDetailComponent implements OnInit {
-  alert: string;
-  updated: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() updated: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Input('uId') uId: string;
   @ViewChild('files') fileInput!: ElementRef;
   update: Update;
@@ -47,12 +46,10 @@ export class UpdateDetailComponent implements OnInit {
     };
     this.httpService.getUserNames(this.update.acknowledged)
       .subscribe((result: Array<string>) => {
-        console.log('Acknowledged Array: ', result);
         this.update.acknowledged = result;
       });
     this.httpService.getUserNames(this.update.notAcknowledged)
       .subscribe((result: Array<string>) => {
-        console.log('Not Acknowledged Array: ', result);
         this.update.notAcknowledged = result;
       })
   }
@@ -81,6 +78,7 @@ export class UpdateDetailComponent implements OnInit {
       this.dataService.message.next(response.message);
       if (response.message === 'Update updated.') {
         this.updated.emit(true);
+        form.reset();
         this.initializeComponent();
       }
     })
@@ -91,7 +89,7 @@ export class UpdateDetailComponent implements OnInit {
       .subscribe((response: Response) => {
         this.dataService.message.next(response.message);
         if (response.message === 'Update deleted.') {
-          this.updated.emit(true);
+          this.updated.emit(true)
         }
       })
   }

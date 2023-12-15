@@ -95,7 +95,6 @@ exports.createUser = (req, res, next) => {
 };
 
 exports.updateUser = (req, res, next) => {
-    console.log(req.body);
     const name = req.body.name;
     const email = req.body.email;
     const peerReviewer = req.body.peerReviewer;

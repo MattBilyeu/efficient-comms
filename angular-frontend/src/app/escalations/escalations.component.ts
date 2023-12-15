@@ -89,6 +89,7 @@ export class EscalationsComponent implements OnInit {
       )
         .subscribe((response: Response) => {
           this.dataService.message.next(response.message);
+          form.reset();
         })
   }
 }

@@ -47,8 +47,9 @@ export class TeamComponent implements OnInit {
   createTeam(form: NgForm) {
     this.httpService.createTeam(form.value.name)
       .subscribe((result: Response) => {
+        this.dataService.message.next(result.message);
+        form.reset();
         this.updateComponent();
-        this.dataService.message.next(result.message)
       })
   }
 
@@ -56,9 +57,8 @@ export class TeamComponent implements OnInit {
     this.httpService.updateTeamName(form.value.newName, form.value.teamId)
       .subscribe((result: Response) => {
         this.dataService.message.next(result.message);
-        if (result.message !== 'Team name updates.') {
-          this.updateComponent();
-        }
+        form.reset();
+        this.updateComponent();
       });
   }
 
@@ -68,6 +68,7 @@ export class TeamComponent implements OnInit {
     const oldTeamId = this.users.filter(user => user._id === userId).map(user => user.teamId)[0];
     this.httpService.reassignMembers(targetTeamId, oldTeamId, userId)
       .subscribe((result: Response) => {
+        form.reset();
         this.updateComponent();
         this.dataService.message.next(result.message);
       })

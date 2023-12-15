@@ -54,6 +54,7 @@ export class UserComponent implements OnInit {
         .subscribe((response: Response) => {
           this.dataService.message.next(response.message);
           if (response.message === 'User created.') {
+            form.reset();
             this.updateComponent();
           }
         })
@@ -74,6 +75,7 @@ export class UserComponent implements OnInit {
       .subscribe((response: Response) => {
         this.dataService.message.next(response.message);
         if (response.message === 'User updated.') {
+          form.reset();
           this.updateComponent();
         }
       })
@@ -85,6 +87,7 @@ export class UserComponent implements OnInit {
       this.httpService.deleteUser(form.value.userId).subscribe((response: Response) => {
         this.dataService.message.next(response.message);
         if (response.message === 'User deleted.') {
+          form.reset();
           this.updateComponent();
         }
       })

@@ -1,37 +1,35 @@
-<div class="container">
-    <div class="viewUpdate">
-        <div class="inputsContainer">
-            <form #a="ngForm" (ngSubmit)="updateUpdate(a)">
-                <h3>{{ update.title }}</h3>
-                <!-- <label for="text">Text: </label> -->
-                <div [innerHTML]="update.text"></div>
-                <div class="textEditor" *ngIf="editText">
-                    <editor [init]="editorConfig" name="text" ngModel required></editor>
-                    <button (click)="toggleEditText()" type="button">Collapse Text Editor</button>
-                </div>
-                <button *ngIf="!editText" (click)="toggleEditText()" type="button">Open Text Editor</button>
-                <label for="files">Replace Attachments:</label>
-                <input type="file" name="files" multiple ngModel (change)="chooseFiles($event)">
-                <button type="submit">Update</button>
-                <button type="button" (click)="deleteUpdate()">Delete Update</button>
-                <div class="currentFiles">
-                    <h3>Current Attachments:</h3>
-                    <ul>
-                        <li *ngFor="let file of fileUrls"><a [href]="file" target="_blank">{{ file }}</a></li>
-                    </ul>
-                   
-                </div>
-                <div class="acknowledgements">
-                    <h3>Acknowledged By:</h3>
-                    <ul>
-                        <li *ngFor="let name of update.acknowledged">{{ name }}</li>
-                    </ul>
-                    <h3>Not Acknowledged By:</h3>
-                    <ul>
-                        <li *ngFor="let name of update.notAcknowledged">{{ name }}</li>
-                    </ul>
-                </div>
-            </form>
-        </div>
+<div class="viewUpdate">
+    <div class="inputsContainer">
+        <form #a="ngForm" (ngSubmit)="updateUpdate(a)">
+            <h3>{{ update.title }}</h3>
+            <!-- <label for="text">Text: </label> -->
+            <div [innerHTML]="update.text"></div>
+            <div class="textEditor" *ngIf="editText">
+                <editor [init]="editorConfig" name="text" ngModel required></editor>
+                <button (click)="toggleEditText()" type="button">Collapse Text Editor</button>
+            </div>
+            <button *ngIf="!editText" (click)="toggleEditText()" type="button">Open Text Editor</button>
+            <label for="files">Replace Attachments:</label>
+            <input type="file" name="files" multiple ngModel (change)="chooseFiles($event)">
+            <button type="submit">Update</button>
+            <button type="button" (click)="deleteUpdate()">Delete Update</button>
+            <div class="currentFiles">
+                <h3>Current Attachments:</h3>
+                <ul>
+                    <li *ngFor="let file of fileUrls"><a [href]="file" target="_blank">{{ file }}</a></li>
+                </ul>
+                
+            </div>
+            <div class="acknowledgements">
+                <h3>Acknowledged By:</h3>
+                <ul>
+                    <li *ngFor="let name of update.acknowledged">{{ name }}</li>
+                </ul>
+                <h3>Not Acknowledged By:</h3>
+                <ul>
+                    <li *ngFor="let name of update.notAcknowledged">{{ name }}</li>
+                </ul>
+            </div>
+        </form>
     </div>
 </div>

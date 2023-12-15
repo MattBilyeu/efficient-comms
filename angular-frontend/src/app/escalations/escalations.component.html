@@ -1,5 +1,5 @@
-<div class="container">
-    <form #c="ngForm" (ngSubmit)="createEscalation(c)" *ngIf="role === 'Member'">
+<div class="container" *ngIf="role === 'Member'">
+    <form #c="ngForm" (ngSubmit)="createEscalation(c)">
         <h3 *ngIf="role === 'Member'">Create Escalation</h3>
         <div class="group">
             <label for="title">Title: </label>
@@ -11,5 +11,7 @@
         <editor [init]="editorConfig" name="note" ngModel required></editor>
         <button type="submit">Create Escalation</button>
     </form>
+</div>
+<div class="container" *ngIf="escalations">
     <app-escalation-detail (deleted)="updateComponent()" [eId]="e._id" *ngFor="let e of escalations"></app-escalation-detail>
 </div>

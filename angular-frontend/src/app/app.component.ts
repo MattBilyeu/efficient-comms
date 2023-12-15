@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.alertMessage = mess;
     setTimeout(()=> {
       this.alertMessage = undefined;
-    }, 4000)
+    }, 2000)
   }
 
   routeUser(role: string) {

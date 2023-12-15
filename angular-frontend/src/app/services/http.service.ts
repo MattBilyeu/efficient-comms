@@ -43,8 +43,10 @@ export class HttpService {
   // Escalation related
   createEscalation(title: string, note: string, files: FileList, teamId: string, ownerId: string, ownerName: string, stage: string) {
     const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i], files[i].name);
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i], files[i].name);
+      }
     };
     formData.append('title', title);
     formData.append('notes', note);
@@ -57,8 +59,10 @@ export class HttpService {
 
   advanceEscalation(advanceObject: advanceEscalationObject) {
     const formData = new FormData();
-    for (let i = 0; i < advanceObject.files.length; i++) {
-      formData.append('files', advanceObject.files[i], advanceObject.files[i].name);
+    if (advanceObject.files) {
+      for (let i = 0; i < advanceObject.files.length; i++) {
+        formData.append('files', advanceObject.files[i], advanceObject.files[i].name);
+      }
     };
     formData.append('note', advanceObject.note);
     formData.append('escalationId', advanceObject.escalationId);
@@ -93,8 +97,10 @@ export class HttpService {
   // Update related
   createUpdate(files: FileList, title: string, text: string) {
     const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i], files[i].name);
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i], files[i].name);
+      }
     };
     formData.append('title', title);
     formData.append('text', text);
@@ -103,9 +109,11 @@ export class HttpService {
 
   updateUpdate(id: string, files: FileList, title: string, text: string) {
     const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append('files', files[i], files[i].name);
-    }
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        formData.append('files', files[i], files[i].name);
+      }
+    };
     formData.append('updateId', id);
     formData.append('title', title);
     formData.append('text', text);

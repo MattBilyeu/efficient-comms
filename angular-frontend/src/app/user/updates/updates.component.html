@@ -1,1 +1,3 @@
-<app-update-detail (acknowledged)="updateComponent()" [updateId]="update._id" *ngFor="let update of updates"></app-update-detail>
+<div *ngIf="updates.length !== 0">
+    <app-update-detail (acknowledged)="updateComponent()" [updateId]="update._id" *ngFor="let update of updates"></app-update-detail>
+</div>

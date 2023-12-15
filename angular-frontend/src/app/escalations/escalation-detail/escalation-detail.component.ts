@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Escalation } from 'src/app/models/escalation.model';
@@ -15,7 +15,7 @@ interface Response {
   styleUrls: ['./escalation-detail.component.css']
 })
 export class EscalationDetailComponent implements OnInit{
-  deleted: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() deleted: EventEmitter<boolean> = new EventEmitter<boolean>();
   alert: string;
   @Input('eId') eId: string;
   escalation: Escalation;
@@ -59,7 +59,7 @@ export class EscalationDetailComponent implements OnInit{
     }
     this.httpService.advanceEscalation(advanceEscalationObject)
       .subscribe((response: Response) => {
-        this.alert = response.message;
+        this.dataService.message.next(response.message);
       })
   }
 
@@ -68,7 +68,7 @@ export class EscalationDetailComponent implements OnInit{
     if (confirmation) {
       this.httpService.deleteEscalation(this.eId)
         .subscribe((response: Response) => {
-          this.alert = response.message;
+          this.dataService.message.next(response.message);
         })
     }
     this.deleted.emit(true);
