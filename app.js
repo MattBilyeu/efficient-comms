@@ -3,14 +3,19 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const multerS3 = require('multer-s3');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const mongoURI = require('./util/protected').mongoURI;
 const secret = require('./util/protected').secret;
+const AWSKey = require('./util/protected').AWSAccessKey;
+const AWSSecret = require('./util/protected').AWSSecretAccessKey;
 const bcrypt = require('bcrypt');
 const helmet = require('helmet');
 const compression = require('compression');
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
 
 const User = require('./models/user');
 
@@ -22,26 +27,37 @@ const updateRoutes = require('./routes/update');
 
 const app = express();
 
+AWS.config.update({
+    accessKeyId: AWSKey,
+    secretAccessKey: AWSSecret,
+    region: 'us-east-2'
+})
+
 const store = new MongoDBStore({
     uri: mongoURI,
     collection: 'sessions'
 })
 
-const fileStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, 'public/files'))
-    },
-    filename: (req, file, cb)=> {
-        const timestamp = new Date().toISOString().replace(/:/g, '-');
-        cb(null, timestamp + '-' + file.originalname)
-    }
-});
+const upload = multer({
+    storage: multerS3({
+        s3: s3,
+        bucket: 'efficient-comms',
+        acl: 'public-read',
+        metadata: function(req, file, cb) {
+            cb(null, {fieldName: file.fieldname})
+        },
+        key: function(req, file, cb) {
+            const timestamp = new Date().toISOString().replace(/:/g, '-');
+            cb(null, timestamp + '-' + file.originalname)
+        }
+    })
+})
 
 app.use(helmet());
 app.use(compression());
 
 app.use(bodyParser.json());
-app.use(multer({storage: fileStorage}).array('files'));
+app.use(upload.array('files'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
