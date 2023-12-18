@@ -9,7 +9,7 @@ exports.createEscalation = (req, res, next) => {
     const notes = [req.body.notes];
     let files = [];
     if (req.files) {
-        files = req.files.map((file) => 'https://s3-us-east-2.amazonaws.com/efficient-comms/' + file.filename);
+        files = req.files.map((file) => file.location);
     }
     const teamId = req.session.teamId;
     const ownerId = req.session.userId;
@@ -67,7 +67,7 @@ exports.advanceEscalation = (req, res, next) => {
     const note = req.body.note;
     let files = [];
     if (req.files) {
-        files = req.files.map(file => 'https://s3-us-east-2.amazonaws.com/efficient-comms/' + file.filename);
+        files = req.files.map(file => file.location);
     }
     let team;
     let peerReviewers;

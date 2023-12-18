@@ -2,20 +2,28 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+
+const AWSKey = require('./util/protected').AWSAccessKey;
+const AWSSecret = require('./util/protected').AWSSecretAccessKey;
 const multer = require('multer');
 const multerS3 = require('multer-s3');
+const { S3Client } = require('@aws-sdk/client-s3');
+const s3 = new S3Client({
+    region: 'us-east-2',
+    credentials: {
+        accessKeyId: AWSKey,
+        secretAccessKey: AWSSecret
+    }
+});
+
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const mongoURI = require('./util/protected').mongoURI;
 const secret = require('./util/protected').secret;
-const AWSKey = require('./util/protected').AWSAccessKey;
-const AWSSecret = require('./util/protected').AWSSecretAccessKey;
 const bcrypt = require('bcrypt');
 const helmet = require('helmet');
 const compression = require('compression');
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
 
 const User = require('./models/user');
 
@@ -27,12 +35,6 @@ const updateRoutes = require('./routes/update');
 
 const app = express();
 
-AWS.config.update({
-    accessKeyId: AWSKey,
-    secretAccessKey: AWSSecret,
-    region: 'us-east-2'
-})
-
 const store = new MongoDBStore({
     uri: mongoURI,
     collection: 'sessions'
@@ -42,7 +44,6 @@ const upload = multer({
     storage: multerS3({
         s3: s3,
         bucket: 'efficient-comms',
-        acl: 'public-read',
         metadata: function(req, file, cb) {
             cb(null, {fieldName: file.fieldname})
         },

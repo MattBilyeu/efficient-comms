@@ -16,7 +16,7 @@
             <div class="currentFiles">
                 <h3>Current Attachments:</h3>
                 <ul>
-                    <li *ngFor="let file of fileUrls"><a [href]="file" target="_blank">{{ file }}</a></li>
+                    <li *ngFor="let url of fileUrls"><a [href]="url" target="_blank">{{ url.substring(url.lastIndexOf('-') + 1) }}</a></li>
                 </ul>
                 
             </div>

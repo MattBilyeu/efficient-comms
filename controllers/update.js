@@ -13,7 +13,7 @@ const sendMailList = function(array, subject, body) {
 exports.createUpdate = (req, res, next) => {
     let files = [];
     if (req.files) {
-        files = req.files.map((file) => 'https://s3-us-east-2.amazonaws.com/efficient-comms/' + file.filename);
+        files = req.files.map((file) => file.location);
     };
     const teamId = req.session.teamId;
     const title = req.body.title;
@@ -72,7 +72,7 @@ exports.updateUpdate = (req, res, next) => {
     const teamId = req.session.teamId;
     let files = [];
     if (req.files) {
-        files = req.files.map((file) => 'https://s3-us-east-2.amazonaws.com/efficient-comms/' + file.filename);
+        files = req.files.map((file) => file.location);
     }
     let changedUpdate;
     let emailList

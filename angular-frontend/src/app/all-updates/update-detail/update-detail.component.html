@@ -4,7 +4,7 @@
             <h3>{{ update.title }}</h3>
             <div [innerHTML]="sanitizedText"></div>
             <div class="files">
-                <a [href]="file" *ngFor="let file of fileUrls" target="_blank">{{ file }}</a>
+                <a [href]="url" *ngFor="let url of fileUrls" target="_blank">{{ url.substring(url.lastIndexOf('-') + 1) }}</a>
             </div>
         </div>
     </div>

@@ -11,7 +11,7 @@
         <label for="files">Files:</label>
         <input type="file" name="files" multiple ngModel (change)="chooseFiles($event)">
         <div class="files">
-            <a [href]="file" *ngFor="let file of fileUrls" target="_blank">{{ file }}</a>
+            <a [href]="url" *ngFor="let url of fileUrls" target="_blank">{{ url.substring(url.lastIndexOf('-') + 1) }}</a>
         </div>
         <button type="submit">Advance Escalation</button>
         <button type="button" (click)="deleteEscalation()">Resolve Escalation</button>
