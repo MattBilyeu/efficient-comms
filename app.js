@@ -93,7 +93,7 @@ User.find().then(users => {
             .then(hashedPassword => {
                 const newAdmin = new User({
                     name: 'Admin',
-                    email: 'Admin@Admin.com',
+                    email: 'admin@admin.com',
                     password: hashedPassword,
                     role: 'Admin',
                     teamId: 'Admin',

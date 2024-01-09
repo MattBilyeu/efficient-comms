@@ -4,7 +4,7 @@ const Team = require('../models/team');
 const bcrypt = require('bcrypt');
 
 exports.postLogin = (req, res, next) => {
-    const email = req.body.email;
+    const email = req.body.email.toLowerCase();
     const password = req.body.password;
     let user;
     User.find({email: email})

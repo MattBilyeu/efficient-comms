@@ -26,7 +26,7 @@ sendNewUserEmail = function(email) {
                     `
                         <h1>New User</h1>
                         <p>The first step is to update your password.</p>
-                        <p>Click this <a href="http://localhost:3000/pass-reset/${token}">link</a> to set a new password.</p>
+                        <p>Click this <a href="https://efficient-comms-8e13c745609a.herokuapp.com/pass-reset/${token}">link</a> to set a new password.</p>
                     `;
                 send([email], 'Welcome to Efficient Comms!',html);
             })
@@ -39,7 +39,7 @@ sendNewUserEmail = function(email) {
 
 exports.createUser = (req, res, next) => {
     const name = req.body.name;
-    const email = req.body.email;
+    const email = req.body.email.toLowerCase();
     const password = 'TempPassword';
     const role = req.body.role;
     const teamId = req.body.teamId;
@@ -96,7 +96,7 @@ exports.createUser = (req, res, next) => {
 
 exports.updateUser = (req, res, next) => {
     const name = req.body.name;
-    const email = req.body.email;
+    const email = req.body.email.toLowerCase();
     const peerReviewer = req.body.peerReviewer;
     const role = req.body.role;
     const userId = req.body.userId;
@@ -146,7 +146,7 @@ exports.sendReset = (req, res, next) => {
                     `
                         <h1>Password Reset</h1>
                         <p>You requested a password reset.</p>
-                        <p>Click this <a href="http://localhost:3000/pass-reset/${token}">link</a> to set a new password.</p>
+                        <p>Click this <a href="https://efficient-comms-8e13c745609a.herokuapp.com/pass-reset/${token}">link</a> to set a new password.</p>
                     `
                 );
                 res.status(200).json({message: 'Password Reset Sent - Please check your email.'})
@@ -206,7 +206,6 @@ exports.deleteUser = (req, res, next) => {
     console.log('Middleware accessed.')
     const userId = req.body.userId;
     let teamId;
-    let updateIds;
     User.findByIdAndDelete(userId)
         .then(deletedUser => {
             if (!deletedUser) {

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Escalation } from '../models/escalation.model';
 import { User } from '../models/user.model';
 
 interface advanceEscalationObject {

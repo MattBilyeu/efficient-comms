@@ -29,7 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.route.url.subscribe(segments => {
       const hasReset = segments.filter(segment => segment.toString() === 'reset');
       if (hasReset.length === 0) {
-        this.router.navigate['/login'];
+        this.router.navigate(['/login']);
         this.loginService.loggedIn.subscribe(response => {
           this.loggedIn = response;
           if (!response) {
